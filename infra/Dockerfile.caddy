@@ -1,6 +1,6 @@
 # Lacuna v2 - Caddy Edge Server
 # Base image: Official Caddy 2.8 with HTTPS support
-FROM caddy:2.8
+FROM caddy:2.10
 
 # Labels for container metadata
 LABEL org.opencontainers.image.title="Lacuna Caddy"
