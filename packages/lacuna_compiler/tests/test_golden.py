@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 from lacuna_compiler.compiler import compile_to_caddy
@@ -191,7 +192,7 @@ def test_golden_has_required_headers(golden_json_path: Path) -> None:
             # Find headers in the structure
             found_lacuna_header = False
 
-            def check_handlers(handler_list):
+            def check_handlers(handler_list: list[dict[str, Any]]) -> None:
                 nonlocal found_lacuna_header
                 for handler in handler_list:
                     if handler.get("handler") == "headers":
