@@ -10,9 +10,8 @@ The matching algorithm mirrors Caddy's routing logic to ensure accuracy.
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
-from lacuna_schema import Config, Host, Rule, load_config, sort_rules
+from lacuna_schema import Config, Host, load_config, sort_rules
 
 
 @dataclass(frozen=True)
@@ -35,9 +34,9 @@ class MatchResult:
     """Result of matching a request against config rules."""
 
     request: Request
-    rule_id: Optional[str]
-    status: Optional[int]
-    location: Optional[str]
+    rule_id: str | None
+    status: int | None
+    location: str | None
     matched: bool
 
     @property
@@ -94,7 +93,7 @@ def match_request(cfg: Config, req: Request) -> MatchResult:
         MatchResult with matched rule details or no-match result
     """
     # Find matching host
-    host_config: Optional[Host] = None
+    host_config: Host | None = None
     for h in cfg.hosts:
         if h.host == req.host:
             host_config = h

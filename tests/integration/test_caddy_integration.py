@@ -10,7 +10,6 @@ from pathlib import Path
 import pytest
 from lacuna_compiler.api import write_candidate
 from lacuna_promote import (
-    ReloadError,
     ValidationError,
     rollback,
     validate_config,
@@ -222,7 +221,7 @@ def test_atomic_write_for_candidate(temp_output_dir: Path, test_config_path: Pat
     assert output1.exists()
 
     # Get file stats
-    stat1 = output1.stat()
+    output1.stat()
 
     # Write again (should atomically replace)
     output2 = write_candidate(config, temp_output_dir)

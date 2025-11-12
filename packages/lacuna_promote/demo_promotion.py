@@ -24,11 +24,11 @@ def mock_caddy_commands(*args, **kwargs):
     elif cmd[0] == "caddy":
         if cmd[1] == "validate":
             # Validation succeeds
-            print(f"    [MOCK] Caddy validate: SUCCESS")
+            print("    [MOCK] Caddy validate: SUCCESS")
             return mock.Mock(returncode=0, stdout="Valid configuration", stderr="")
         elif cmd[1] == "reload":
             # Reload succeeds
-            print(f"    [MOCK] Caddy reload: SUCCESS")
+            print("    [MOCK] Caddy reload: SUCCESS")
             return mock.Mock(returncode=0, stdout="Configuration reloaded", stderr="")
 
     return mock.Mock(returncode=0, stdout="", stderr="")

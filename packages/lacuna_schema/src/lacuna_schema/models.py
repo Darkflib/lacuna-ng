@@ -1,6 +1,6 @@
 """Pydantic models for Lacuna v2 YAML configuration schema."""
 
-from typing import List, Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -38,7 +38,7 @@ class Rule(BaseModel):
     status: Literal[301, 302, 303, 307, 308] = Field(
         description="HTTP redirect status code",
     )
-    keep_query: Optional[bool] = Field(
+    keep_query: bool | None = Field(
         default=None,
         description="Override default keep_query behavior for this rule",
     )
@@ -82,11 +82,11 @@ class Host(BaseModel):
     host: str = Field(
         description="Domain name (without protocol)",
     )
-    hsts: Optional[bool] = Field(
+    hsts: bool | None = Field(
         default=None,
         description="Override default HSTS setting for this host",
     )
-    rules: List[Rule] = Field(
+    rules: list[Rule] = Field(
         description="Redirect rules for this host",
     )
 
@@ -118,7 +118,7 @@ class Config(BaseModel):
     defaults: Defaults = Field(
         description="Global default settings",
     )
-    hosts: List[Host] = Field(
+    hosts: list[Host] = Field(
         description="List of hosts with their redirect rules",
     )
 

@@ -3,7 +3,7 @@
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pytest
 
@@ -48,7 +48,7 @@ def compiled_config(temp_output_dir: Path, test_config_path: Path) -> Path:
 def mock_caddy_success(monkeypatch: pytest.MonkeyPatch) -> None:
     """Mock Caddy commands to succeed."""
 
-    def mock_run(cmd: List[str], **kwargs: Any) -> subprocess.CompletedProcess:
+    def mock_run(cmd: list[str], **kwargs: Any) -> subprocess.CompletedProcess:
         return subprocess.CompletedProcess(cmd, 0, "", "")
 
     monkeypatch.setattr(subprocess, "run", mock_run)
@@ -58,7 +58,7 @@ def mock_caddy_success(monkeypatch: pytest.MonkeyPatch) -> None:
 def mock_caddy_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     """Mock Caddy commands to fail."""
 
-    def mock_run(cmd: List[str], **kwargs: Any) -> subprocess.CompletedProcess:
+    def mock_run(cmd: list[str], **kwargs: Any) -> subprocess.CompletedProcess:
         return subprocess.CompletedProcess(cmd, 1, "", "Caddy error")
 
     monkeypatch.setattr(subprocess, "run", mock_run)
@@ -68,7 +68,7 @@ def mock_caddy_failure(monkeypatch: pytest.MonkeyPatch) -> None:
 def mock_caddy_validate_success_reload_fail(monkeypatch: pytest.MonkeyPatch) -> None:
     """Mock Caddy: validate succeeds, reload fails."""
 
-    def mock_run(cmd: List[str], **kwargs: Any) -> subprocess.CompletedProcess:
+    def mock_run(cmd: list[str], **kwargs: Any) -> subprocess.CompletedProcess:
         if "validate" in cmd:
             return subprocess.CompletedProcess(cmd, 0, "", "")
         if "reload" in cmd:

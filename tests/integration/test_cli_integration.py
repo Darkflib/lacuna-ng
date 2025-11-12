@@ -102,7 +102,7 @@ def test_compiler_cli_with_promotion(
     if not caddy_available:
         pytest.skip("Caddy binary not available")
 
-    result = subprocess.run(
+    subprocess.run(
         [
             "uv",
             "run",

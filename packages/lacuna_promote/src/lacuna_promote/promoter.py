@@ -16,12 +16,10 @@ import subprocess
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional
 
 import requests
 from lacuna_compiler.api import write_candidate
 from lacuna_schema.api import load_config
-from lacuna_schema.models import Config
 
 # Configure logging
 logging.basicConfig(
@@ -63,7 +61,7 @@ class PromoteOptions:
     out_dir: Path
     caddy_bin: str = "caddy"
     validate_only: bool = False
-    sentinel_urls: Optional[List[str]] = None
+    sentinel_urls: list[str] | None = None
     probe_timeout: float = 5.0
 
 
@@ -114,7 +112,7 @@ def validate_config(config_path: Path, caddy_bin: str = "caddy") -> bool:
         return False
 
 
-def probe_sentinels(urls: List[str], timeout: float = 5.0) -> bool:
+def probe_sentinels(urls: list[str], timeout: float = 5.0) -> bool:
     """
     Probe sentinel URLs, expect 30x responses.
 
@@ -154,7 +152,7 @@ def probe_sentinels(urls: List[str], timeout: float = 5.0) -> bool:
     return all_success
 
 
-def backup_active(out_dir: Path) -> Optional[Path]:
+def backup_active(out_dir: Path) -> Path | None:
     """
     Backup active config to lastgood.
 
@@ -397,7 +395,7 @@ def compile_and_promote(yaml_path: Path, opts: PromoteOptions) -> Path:
         logger.info("Step 3/8: Validating with Caddy")
         if not validate_config(next_path, opts.caddy_bin):
             raise ValidationError(f"Caddy validation failed for {next_path}")
-        logger.info(f"✓ Caddy validation passed")
+        logger.info("✓ Caddy validation passed")
 
         # If validate-only mode, stop here
         if opts.validate_only:
@@ -437,7 +435,7 @@ def compile_and_promote(yaml_path: Path, opts: PromoteOptions) -> Path:
                 try:
                     rollback(opts.out_dir, opts.caddy_bin)
                     logger.info("✓ Rollback succeeded")
-                except RollbackError as e:
+                except RollbackError:
                     logger.critical("✗ ROLLBACK FAILED - MANUAL INTERVENTION REQUIRED")
                     raise
                 raise ReloadError(f"Caddy reload failed, rolled back to {lastgood_path}")

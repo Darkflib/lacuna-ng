@@ -3,8 +3,8 @@
 import hashlib
 import json
 import subprocess
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from datetime import UTC, datetime
+from typing import Any
 
 from lacuna_schema.api import Config, sort_rules
 from lacuna_schema.models import Host, Rule
@@ -27,7 +27,7 @@ def _get_git_hash() -> str:
     return "unknown"
 
 
-def _compute_content_sha256(apps_block: Dict[str, Any]) -> str:
+def _compute_content_sha256(apps_block: dict[str, Any]) -> str:
     """Compute SHA256 of the apps block for change detection."""
     content = json.dumps(apps_block, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
@@ -35,7 +35,7 @@ def _compute_content_sha256(apps_block: Dict[str, Any]) -> str:
 
 def _build_exact_match_handler(
     rule: Rule, hsts_enabled: bool
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     Build handler for exact path match.
 
@@ -43,10 +43,10 @@ def _build_exact_match_handler(
     1. Headers handler (X-Lacuna-Rule + HSTS if enabled)
     2. Static response with Location and status code
     """
-    handlers: List[Dict[str, Any]] = []
+    handlers: list[dict[str, Any]] = []
 
     # Headers handler
-    response_headers: Dict[str, List[str]] = {
+    response_headers: dict[str, list[str]] = {
         "X-Lacuna-Rule": [rule.id],
     }
 
@@ -80,7 +80,7 @@ def _build_exact_match_handler(
 
 def _build_prefix_match_handler(
     rule: Rule, hsts_enabled: bool, keep_query: bool
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     Build handler for prefix path match.
 
@@ -94,7 +94,7 @@ def _build_prefix_match_handler(
 
     The Location header uses Caddy placeholders to preserve the path.
     """
-    handlers: List[Dict[str, Any]] = []
+    handlers: list[dict[str, Any]] = []
 
     # Build the Location header value
     # Strip trailing slash from 'to' and construct dynamic redirect
@@ -110,7 +110,7 @@ def _build_prefix_match_handler(
         location_value = f"{to_base}{{http.request.uri.path}}"
 
     # Headers for the response
-    response_headers: Dict[str, List[str]] = {
+    response_headers: dict[str, list[str]] = {
         "X-Lacuna-Rule": [rule.id],
     }
 
@@ -120,7 +120,7 @@ def _build_prefix_match_handler(
         ]
 
     # Build subroute handler
-    subroute_handlers: List[Dict[str, Any]] = [
+    subroute_handlers: list[dict[str, Any]] = [
         {
             "handler": "rewrite",
             "strip_path_prefix": rule.from_,
@@ -163,7 +163,7 @@ def _build_prefix_match_handler(
     return handlers
 
 
-def _build_host_route(host: Host, defaults_hsts: bool, defaults_keep_query: bool) -> Dict[str, Any]:
+def _build_host_route(host: Host, defaults_hsts: bool, defaults_keep_query: bool) -> dict[str, Any]:
     """
     Build a Caddy route for a single host.
 
@@ -179,7 +179,7 @@ def _build_host_route(host: Host, defaults_hsts: bool, defaults_keep_query: bool
     sorted_host = sort_rules(host)
 
     # Build rule routes (subroutes within the host's subroute)
-    rule_routes: List[Dict[str, Any]] = []
+    rule_routes: list[dict[str, Any]] = []
 
     for rule in sorted_host.rules:
         # Determine keep_query for this rule
@@ -193,7 +193,7 @@ def _build_host_route(host: Host, defaults_hsts: bool, defaults_keep_query: bool
             path_pattern = f"{rule.from_}*"
             handlers = _build_prefix_match_handler(rule, hsts_enabled, keep_query)
 
-        rule_route: Dict[str, Any] = {
+        rule_route: dict[str, Any] = {
             "match": [{"path": [path_pattern]}],
             "handle": handlers,
         }
@@ -201,7 +201,7 @@ def _build_host_route(host: Host, defaults_hsts: bool, defaults_keep_query: bool
         rule_routes.append(rule_route)
 
     # Build the host route
-    host_route: Dict[str, Any] = {
+    host_route: dict[str, Any] = {
         "match": [{"host": [host.host]}],
         "handle": [
             {
@@ -215,7 +215,7 @@ def _build_host_route(host: Host, defaults_hsts: bool, defaults_keep_query: bool
     return host_route
 
 
-def _build_http_redirect_server() -> Dict[str, Any]:
+def _build_http_redirect_server() -> dict[str, Any]:
     """
     Build the HTTP (port 80) server that redirects all traffic to HTTPS.
 
@@ -239,13 +239,13 @@ def _build_http_redirect_server() -> Dict[str, Any]:
     }
 
 
-def _build_https_server(config: Config) -> Dict[str, Any]:
+def _build_https_server(config: Config) -> dict[str, Any]:
     """
     Build the HTTPS (port 443) server with SNI routing per host.
 
     Returns a server config with routes for each host.
     """
-    routes: List[Dict[str, Any]] = []
+    routes: list[dict[str, Any]] = []
 
     for host in config.hosts:
         host_route = _build_host_route(
@@ -261,7 +261,7 @@ def _build_https_server(config: Config) -> Dict[str, Any]:
     }
 
 
-def compile_to_caddy(cfg: Config) -> Dict[str, Any]:
+def compile_to_caddy(cfg: Config) -> dict[str, Any]:
     """
     Compile a validated Lacuna Config to Caddy JSON.
 
@@ -298,7 +298,7 @@ def compile_to_caddy(cfg: Config) -> Dict[str, Any]:
 
     # Build metadata
     metadata = {
-        "built_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "built_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "git": _get_git_hash(),
         "content_sha256": _compute_content_sha256(apps_block),
     }

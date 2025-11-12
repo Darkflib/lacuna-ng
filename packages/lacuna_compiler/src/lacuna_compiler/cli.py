@@ -2,7 +2,6 @@
 
 import sys
 from pathlib import Path
-from typing import Optional
 
 import typer
 from lacuna_schema.api import load_config
@@ -120,7 +119,7 @@ def main(
         )
 
         # Compile to Caddy JSON and write
-        typer.echo(f"Compiling to Caddy JSON...")
+        typer.echo("Compiling to Caddy JSON...")
         output_path = write_candidate(config, out_dir)
         typer.echo(f"✓ Written to {output_path}")
 

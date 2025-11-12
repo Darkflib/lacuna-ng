@@ -1,6 +1,5 @@
 """Tests for validators and sorting utilities."""
 
-import pytest
 
 from lacuna_schema import Host, Rule, sort_rules
 from lacuna_schema.validators import (

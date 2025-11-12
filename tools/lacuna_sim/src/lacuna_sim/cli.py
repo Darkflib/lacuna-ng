@@ -6,7 +6,6 @@ Usage:
 """
 
 from pathlib import Path
-from typing import Optional
 
 import typer
 from rich.console import Console
@@ -18,7 +17,6 @@ from .simulator import (
     Request,
     generate_coverage_report,
     load_config_from_yaml,
-    match_request,
     parse_cases_file,
     simulate_batch,
 )
@@ -87,7 +85,7 @@ def print_coverage_report(report: CoverageReport) -> None:
 
     # Dead rules
     if report.dead_rules:
-        console.print(f"[red]✗[/red] Dead rules (never matched):")
+        console.print("[red]✗[/red] Dead rules (never matched):")
         for rule_id in sorted(report.dead_rules):
             console.print(f"  - [red]{rule_id}[/red]")
     else:
@@ -125,7 +123,7 @@ def parse_request_arg(request_str: str) -> Request:
 
 @app.command()
 def main(
-    yaml: Optional[Path] = typer.Option(
+    yaml: Path | None = typer.Option(
         None,
         "--yaml",
         "-y",
@@ -134,7 +132,7 @@ def main(
         dir_okay=False,
         resolve_path=True,
     ),
-    cases: Optional[Path] = typer.Option(
+    cases: Path | None = typer.Option(
         None,
         "--cases",
         "-c",
@@ -143,7 +141,7 @@ def main(
         dir_okay=False,
         resolve_path=True,
     ),
-    request: Optional[str] = typer.Option(
+    request: str | None = typer.Option(
         None,
         "--request",
         "-r",

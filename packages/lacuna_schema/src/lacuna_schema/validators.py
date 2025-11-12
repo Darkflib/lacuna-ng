@@ -1,10 +1,8 @@
 """Semantic validators and sorting utilities for Lacuna v2 configuration."""
 
 import re
-from typing import List
 
 from .models import Host, Rule
-
 
 # Rule ID pattern (already enforced by Pydantic, but available as constant)
 RULE_ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
@@ -95,7 +93,7 @@ def validate_path_starts_with_slash(path: str) -> bool:
     return path.startswith("/")
 
 
-def detect_duplicate_ids(rules: List[Rule]) -> List[str]:
+def detect_duplicate_ids(rules: list[Rule]) -> list[str]:
     """
     Detect duplicate rule IDs in a list of rules.
 
@@ -117,7 +115,7 @@ def detect_duplicate_ids(rules: List[Rule]) -> List[str]:
     return sorted(duplicates)
 
 
-def sort_rules_by_path_length(rules: List[Rule]) -> List[Rule]:
+def sort_rules_by_path_length(rules: list[Rule]) -> list[Rule]:
     """
     Sort rules by path length (longest first) within each match type.
 

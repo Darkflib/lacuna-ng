@@ -13,7 +13,6 @@ from lacuna_schema.api import load_config
 from lacuna_sim import (
     Request,
     generate_coverage_report,
-    load_config_from_yaml,
     simulate_batch,
 )
 

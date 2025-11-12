@@ -3,9 +3,8 @@
 from pathlib import Path
 
 import pytest
-from pydantic import ValidationError
-
 from lacuna_schema import Config, Defaults, Host, Rule, load_config
+from pydantic import ValidationError
 
 
 class TestDefaults:

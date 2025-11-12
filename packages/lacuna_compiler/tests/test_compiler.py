@@ -1,12 +1,9 @@
 """Unit tests for lacuna_compiler core compilation logic."""
 
 import json
-from typing import Any, Dict
-
-import pytest
-from lacuna_schema.models import Config, Defaults, Host, Rule
 
 from lacuna_compiler.compiler import compile_to_caddy
+from lacuna_schema.models import Config, Defaults, Host, Rule
 
 
 def test_basic_structure() -> None:

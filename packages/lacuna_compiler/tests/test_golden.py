@@ -4,9 +4,8 @@ import json
 from pathlib import Path
 
 import pytest
-from lacuna_schema.api import load_config
-
 from lacuna_compiler.compiler import compile_to_caddy
+from lacuna_schema.api import load_config
 
 
 @pytest.fixture

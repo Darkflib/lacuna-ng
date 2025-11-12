@@ -16,9 +16,7 @@ from pathlib import Path
 
 import pytest
 from lacuna_schema import Config, Defaults, Host, Rule
-
 from lacuna_sim import (
-    CoverageReport,
     MatchResult,
     Request,
     generate_coverage_report,

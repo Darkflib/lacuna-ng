@@ -69,7 +69,7 @@ def check(
         sys.exit(1)
 
     except yaml.YAMLError as e:
-        typer.secho(f"✗ YAML parsing error:", err=True, fg=typer.colors.RED)
+        typer.secho("✗ YAML parsing error:", err=True, fg=typer.colors.RED)
         typer.echo(f"  {e}", err=True)
         sys.exit(1)
 

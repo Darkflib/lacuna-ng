@@ -1,7 +1,7 @@
 """Public API for loading and manipulating Lacuna v2 configurations."""
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import yaml
 from pydantic import ValidationError
@@ -35,7 +35,7 @@ def load_config(path: Path) -> Config:
 
     with path.open("r", encoding="utf-8") as f:
         try:
-            data: Dict[str, Any] = yaml.safe_load(f)
+            data: dict[str, Any] = yaml.safe_load(f)
         except yaml.YAMLError as e:
             raise yaml.YAMLError(f"Failed to parse YAML from {path}: {e}") from e
 
