@@ -30,6 +30,7 @@ dev = [
     "pydantic",
     "typer",
     "rich",
+    "types-requests>=2.32.4.20250913",
 ]
 
 [tool.mypy]

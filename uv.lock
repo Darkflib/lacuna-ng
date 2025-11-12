@@ -296,6 +296,7 @@ dev = [
     { name = "ruff" },
     { name = "typer" },
     { name = "types-pyyaml" },
+    { name = "types-requests" },
 ]
 
 [package.metadata]
@@ -313,6 +314,7 @@ dev = [
     { name = "ruff", specifier = ">=0.2.0" },
     { name = "typer" },
     { name = "types-pyyaml" },
+    { name = "types-requests", specifier = ">=2.32.4.20250913" },
 ]
 
 [[package]]

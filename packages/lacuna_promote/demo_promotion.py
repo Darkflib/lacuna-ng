@@ -9,12 +9,13 @@ to be installed, using mocked subprocess calls.
 import json
 import tempfile
 from pathlib import Path
+from typing import Any
 from unittest import mock
 
 from lacuna_promote import PromoteOptions, compile_and_promote
 
 
-def mock_caddy_commands(*args, **kwargs):
+def mock_caddy_commands(*args: Any, **kwargs: Any) -> mock.Mock:
     """Mock Caddy commands to simulate successful promotion."""
     cmd = args[0]
 
@@ -31,10 +32,10 @@ def mock_caddy_commands(*args, **kwargs):
             print("    [MOCK] Caddy reload: SUCCESS")
             return mock.Mock(returncode=0, stdout="Configuration reloaded", stderr="")
 
-    return mock.Mock(returncode=0, stdout="", stderr="")
+    return mock.Mock(returncode=1, stdout="", stderr="Unknown command")
 
 
-def main():
+def main() -> int:
     """Run the demo."""
     print("=" * 80)
     print("LACUNA PROMOTE DEMONSTRATION")
