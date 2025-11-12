@@ -73,7 +73,7 @@ class TestBackupActive:
     def test_backup_existing_active(self, tmp_path: Path) -> None:
         """Test backup of existing active config."""
         active_path = tmp_path / "config.active.json"
-        active_data = {"apps": {"http": {"servers": {}}}}
+        active_data: dict[str, Any] = {"apps": {"http": {"servers": {}}}}
         active_path.write_text(json.dumps(active_data))
 
         lastgood_path = backup_active(tmp_path)

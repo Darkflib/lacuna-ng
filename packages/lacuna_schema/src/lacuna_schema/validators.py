@@ -153,4 +153,5 @@ def sort_host_rules(host: Host) -> Host:
         New Host instance with sorted rules
     """
     sorted_rules = sort_rules_by_path_length(host.rules)
-    return host.model_copy(update={"rules": sorted_rules})
+    new_host: Host = host.model_copy(update={"rules": sorted_rules})
+    return new_host

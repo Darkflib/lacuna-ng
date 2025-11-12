@@ -9,6 +9,8 @@ from pydantic import ValidationError
 from .models import Config, Host
 from .validators import sort_host_rules
 
+__all__ = ["Config", "Host", "load_config", "sort_rules"]
+
 
 def load_config(path: Path) -> Config:
     """
@@ -53,12 +55,12 @@ def load_config(path: Path) -> Config:
         )
 
     try:
-        config = Config.model_validate(data)
+        validated_config: Config = Config.model_validate(data)
     except ValidationError:
         # Re-raise with preserved error context
         raise
 
-    return config
+    return validated_config
 
 
 def sort_rules(host: Host) -> Host:

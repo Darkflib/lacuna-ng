@@ -18,8 +18,8 @@ members = [
     "tools/lacuna_sim"
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest>=8.0.0",
     "pytest-cov>=4.1.0",
     "mypy>=1.11.0",
@@ -29,6 +29,7 @@ dev-dependencies = [
     "pre-commit>=3.0.0",
     "yamllint>=1.35.0",
     "types-requests>=2.32.4.20250913",
+    "types-pyyaml>=6.0.12.20250915",
 ]
 
 [tool.mypy]

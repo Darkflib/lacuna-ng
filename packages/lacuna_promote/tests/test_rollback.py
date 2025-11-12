@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import Any
 from unittest import mock
 
 import pytest
@@ -39,7 +40,7 @@ hosts:
         old_config = {"apps": {"http": {"old": "config"}}}
         active_path.write_text(json.dumps(old_config))
 
-        def mock_subprocess(*args, **kwargs):
+        def mock_subprocess(*args: Any, **kwargs: Any) -> mock.Mock:
             """Mock subprocess calls, differentiating between git and caddy."""
             cmd = args[0]
             if cmd[0] == "git":
@@ -141,7 +142,7 @@ hosts:
         out_dir = tmp_path / "config"
         opts = PromoteOptions(out_dir=out_dir)
 
-        def mock_subprocess(*args, **kwargs):
+        def mock_subprocess(*args: Any, **kwargs: Any) -> mock.Mock:
             """Mock subprocess calls."""
             cmd = args[0]
             if cmd[0] == "git":
@@ -186,7 +187,7 @@ hosts:
         out_dir = tmp_path / "config"
         opts = PromoteOptions(out_dir=out_dir, sentinel_urls=["http://example.com/health"])
 
-        def mock_subprocess(*args, **kwargs):
+        def mock_subprocess(*args: Any, **kwargs: Any) -> mock.Mock:
             """Mock subprocess calls."""
             cmd = args[0]
             if cmd[0] == "git":

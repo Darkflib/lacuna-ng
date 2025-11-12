@@ -173,7 +173,7 @@ class TestRule:
         for match_type in ["exact", "prefix"]:
             rule = Rule(
                 id="test",
-                match=match_type,  # type: ignore
+                match=match_type,
                 **{"from": "/", "to": "https://example.com", "status": 301},
             )
             assert rule.match == match_type
@@ -183,7 +183,7 @@ class TestRule:
         with pytest.raises(ValidationError):
             Rule(
                 id="test",
-                match="regex",  # type: ignore
+                match="regex",
                 **{"from": "/", "to": "https://example.com", "status": 301},
             )
 
