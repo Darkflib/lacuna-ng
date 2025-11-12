@@ -41,18 +41,24 @@ def basic_config() -> Config:
                     Rule(
                         id="home",
                         match="exact",
-                        **{"from": "/", "to": "https://www.example.org/", "status": 308},
-                    ),  # type: ignore[arg-type]
+                        from_="/",
+                        to="https://www.example.org/",
+                        status=308,  # type: ignore[call-arg]
+                    ),
                     Rule(
                         id="blog",
                         match="prefix",
-                        **{"from": "/blog", "to": "https://blog.example.org", "status": 308},
-                    ),  # type: ignore[arg-type]
+                        from_="/blog",
+                        to="https://blog.example.org",
+                        status=308,  # type: ignore[call-arg]
+                    ),
                     Rule(
                         id="api",
                         match="prefix",
-                        **{"from": "/api", "to": "https://api.example.org", "status": 307},
-                    ),  # type: ignore[arg-type]
+                        from_="/api",
+                        to="https://api.example.org",
+                        status=307,  # type: ignore[call-arg]
+                    ),
                 ],
             ),
         ],
@@ -74,35 +80,37 @@ def complex_config() -> Config:
                     Rule(
                         id="root-prefix",
                         match="prefix",
-                        **{"from": "/", "to": "https://fallback.example.org", "status": 308},
-                    ),  # type: ignore[arg-type]
+                        from_="/",
+                        to="https://fallback.example.org",
+                        status=308,  # type: ignore[call-arg]
+                    ),
                     Rule(
                         id="blog-post-exact",
                         match="exact",
-                        **{
-                            "from": "/blog/post-1",
-                            "to": "https://special.example.org",
-                            "status": 308,
-                        },
+                        from_="/blog/post-1",
+                        to="https://special.example.org",
+                        status=308,  # type: ignore[call-arg]
                     ),
                     Rule(
                         id="blog-prefix",
                         match="prefix",
-                        **{"from": "/blog", "to": "https://blog.example.org", "status": 308},
-                    ),  # type: ignore[arg-type]
+                        from_="/blog",
+                        to="https://blog.example.org",
+                        status=308,  # type: ignore[call-arg]
+                    ),
                     Rule(
                         id="docs-exact",
                         match="exact",
-                        **{"from": "/docs", "to": "https://docs.example.org", "status": 308},
-                    ),  # type: ignore[arg-type]
+                        from_="/docs",
+                        to="https://docs.example.org",
+                        status=308,  # type: ignore[call-arg]
+                    ),
                     Rule(
                         id="never-matched",
                         match="exact",
-                        **{
-                            "from": "/never-used",
-                            "to": "https://dead.example.org",
-                            "status": 308,
-                        },
+                        from_="/never-used",
+                        to="https://dead.example.org",
+                        status=308,  # type: ignore[call-arg]
                     ),
                 ],
             ),
@@ -123,21 +131,17 @@ def query_config() -> Config:
                     Rule(
                         id="keep-query",
                         match="prefix",
-                        **{
-                            "from": "/keep",
-                            "to": "https://keep.example.org",
-                            "status": 308,
-                        },
+                        from_="/keep",
+                        to="https://keep.example.org",
+                        status=308,  # type: ignore[call-arg]
                         keep_query=True,
                     ),
                     Rule(
                         id="drop-query",
                         match="prefix",
-                        **{
-                            "from": "/drop",
-                            "to": "https://drop.example.org",
-                            "status": 308,
-                        },
+                        from_="/drop",
+                        to="https://drop.example.org",
+                        status=308,  # type: ignore[call-arg]
                         keep_query=False,
                     ),
                 ],
@@ -364,8 +368,10 @@ class TestDeadRuleDetection:
                         Rule(
                             id="only-rule",
                             match="exact",
-                            **{"from": "/test", "to": "https://test.com", "status": 308},
-                        ),  # type: ignore[arg-type]
+                            from_="/test",
+                            to="https://test.com",
+                            status=308,  # type: ignore[call-arg]
+                        ),
                     ],
                 ),
             ],
