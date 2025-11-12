@@ -1,0 +1,15 @@
+# Test cases for test_config.yaml
+# Format: HOST PATH [QUERY]
+
+# Test home rule (exact match)
+test.example.com /
+
+# Test api rule (prefix match with query)
+test.example.com /api
+test.example.com /api/v1/users
+test.example.com /api/v1/users id=123
+
+# Test static rule (prefix match, no query)
+test.example.com /static
+test.example.com /static/js/app.js
+test.example.com /static/css/style.css version=1.0

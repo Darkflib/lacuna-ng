@@ -1,0 +1,56 @@
+# Lacuna v2 - Kubernetes Persistent Volume Claims
+# Storage for configuration files and ACME cache
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lacuna-config-pvc
+  labels:
+    app: lacuna
+    component: config
+    version: v2
+spec:
+  accessModes:
+    # ReadWriteOnce: Volume can be mounted as read-write by a single node
+    # For multi-replica deployments with shared config, consider ReadWriteMany
+    # if your storage class supports it
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # storageClassName: standard  # Uncomment and set your storage class
+  # For cloud providers:
+  # - GKE: standard, standard-rwo
+  # - EKS: gp2, gp3
+  # - AKS: default, managed-premium
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lacuna-acme-pvc
+  labels:
+    app: lacuna
+    component: acme-cache
+    version: v2
+spec:
+  accessModes:
+    # ReadWriteOnce: ACME cache doesn't need to be shared across pods
+    # Caddy will handle certificate synchronization via storage
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # storageClassName: standard  # Uncomment and set your storage class
+
+# Note: Before deploying, ensure your cluster has a default StorageClass
+# or uncomment and specify storageClassName above.
+#
+# Check available storage classes:
+#   kubectl get storageclass
+#
+# For production, consider:
+# - Using SSD-backed storage for faster config reads
+# - Regular backups of the config PVC
+# - Monitoring storage usage and setting alerts

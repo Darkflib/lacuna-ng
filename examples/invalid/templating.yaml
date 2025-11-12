@@ -1,0 +1,26 @@
+# INVALID: Contains templating characters in 'to' field
+# Expected error: Templating characters {, }, $ not allowed
+
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: templated.example.com
+    hsts: true
+    rules:
+      # This should be rejected - {user} is a templating variable
+      - id: user-profile
+        match: prefix
+        from: /user
+        to: https://example.com/users/{user}/profile
+        status: 308
+
+      # This would also fail - $ is a templating character
+      - id: with-dollar
+        match: prefix
+        from: /env
+        to: https://example.com/$ENV_VAR/path
+        status: 301

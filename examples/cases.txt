@@ -1,0 +1,71 @@
+# Lacuna v2 - Test Cases for Simulator
+# Format: HOST PATH [QUERY]
+#
+# These test cases cover all rules defined in domainlist.yaml
+# Expected behavior is documented in comments
+
+# prod.example.com tests
+# ----------------------
+
+# Test "home" rule (exact match on /)
+prod.example.com /
+# Expected: 308 → https://www.example.org/
+
+# Test "blog" rule (prefix match on /blog)
+prod.example.com /blog
+# Expected: 308 → https://blog.example.org
+
+prod.example.com /blog/
+# Expected: 308 → https://blog.example.org/
+
+prod.example.com /blog/post-1
+# Expected: 308 → https://blog.example.org/post-1
+
+prod.example.com /blog/2024/11/article page=2
+# Expected: 308 → https://blog.example.org/2024/11/article?page=2
+
+# Test "docs" rule (prefix match on /docs, no query preservation)
+prod.example.com /docs
+# Expected: 308 → https://docs.example.org
+
+prod.example.com /docs/guide
+# Expected: 308 → https://docs.example.org/guide
+
+prod.example.com /docs/api/reference query=test
+# Expected: 308 → https://docs.example.org/api/reference (query dropped)
+
+# Test "api" rule (prefix match on /api with 307 status)
+prod.example.com /api
+# Expected: 307 → https://api.example.org
+
+prod.example.com /api/v1/users
+# Expected: 307 → https://api.example.org/v1/users
+
+prod.example.com /api/v1/users id=123&format=json
+# Expected: 307 → https://api.example.org/v1/users?id=123&format=json
+
+# old.example.com tests
+# ----------------------
+
+# Test "catch-all" rule (prefix match on /, 301 status)
+old.example.com /
+# Expected: 301 → https://new.example.com
+
+old.example.com /anything
+# Expected: 301 → https://new.example.com/anything
+
+old.example.com /path/to/resource search=query
+# Expected: 301 → https://new.example.com/path/to/resource?search=query
+
+# parked.example.com tests
+# -------------------------
+
+# Test "parked" rule (prefix match on /, 302 status, no HSTS)
+parked.example.com /
+# Expected: 302 → https://about.example.com/parked
+
+parked.example.com /test
+# Expected: 302 → https://about.example.com/parked/test
+
+parked.example.com /anything/goes/here foo=bar
+# Expected: 302 → https://about.example.com/parked/anything/goes/here (query dropped)

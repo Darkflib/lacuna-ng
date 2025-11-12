@@ -1,0 +1,31 @@
+# INVALID: Duplicate rule IDs within the same host
+# Expected error: Rule ID 'blog' appears multiple times in host example.com
+
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: example.com
+    hsts: true
+    rules:
+      - id: blog
+        match: prefix
+        from: /blog
+        to: https://blog.example.com
+        status: 308
+
+      - id: docs
+        match: prefix
+        from: /docs
+        to: https://docs.example.com
+        status: 308
+
+      # This should be rejected - 'blog' ID is already used above
+      - id: blog
+        match: prefix
+        from: /weblog
+        to: https://weblog.example.com
+        status: 301

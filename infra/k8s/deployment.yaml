@@ -1,0 +1,190 @@
+# Lacuna v2 - Kubernetes Deployment
+# Caddy edge server with high availability
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lacuna-caddy
+  labels:
+    app: lacuna
+    component: caddy
+    version: v2
+spec:
+  # Number of replicas for high availability
+  # Start with 2, scale based on traffic patterns
+  replicas: 2
+
+  # Selector must match pod template labels
+  selector:
+    matchLabels:
+      app: lacuna
+      component: caddy
+
+  # Deployment strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1          # Allow 1 extra pod during updates
+      maxUnavailable: 0    # Keep all pods available during updates
+
+  # Pod template
+  template:
+    metadata:
+      labels:
+        app: lacuna
+        component: caddy
+        version: v2
+      annotations:
+        # Prometheus scraping annotations (if using Prometheus)
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "2019"
+        prometheus.io/path: "/metrics"
+
+    spec:
+      # Security context for the pod
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+
+      # Init container to ensure config exists
+      initContainers:
+        - name: config-check
+          image: busybox:latest
+          command: ['sh', '-c', 'ls -la /srv/lacuna/config/config.active.json || echo "WARNING: config.active.json not found"']
+          volumeMounts:
+            - name: config-volume
+              mountPath: /srv/lacuna/config
+
+      # Main container
+      containers:
+        - name: caddy
+          # Image from GitHub Container Registry
+          # Replace ${REPO} with your actual repository path
+          # Example: ghcr.io/myorg/lacuna-caddy:latest
+          image: ghcr.io/REPLACE_WITH_YOUR_REPO/lacuna-caddy:latest
+          imagePullPolicy: Always
+
+          # Ports exposed by the container
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+            - name: admin
+              containerPort: 2019
+              protocol: TCP
+
+          # Environment variables
+          env:
+            - name: CADDY_ADMIN
+              value: "127.0.0.1:2019"
+
+          # Volume mounts
+          volumeMounts:
+            - name: config-volume
+              mountPath: /srv/lacuna/config
+              readOnly: false
+            - name: acme-volume
+              mountPath: /data
+              readOnly: false
+
+          # Resource requests and limits
+          resources:
+            requests:
+              cpu: 100m        # 0.1 CPU cores
+              memory: 128Mi    # 128 MiB RAM
+            limits:
+              cpu: 500m        # 0.5 CPU cores max
+              memory: 512Mi    # 512 MiB RAM max
+
+          # Liveness probe: Check if Caddy is running
+          livenessProbe:
+            httpGet:
+              path: /config/
+              port: 2019
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+
+          # Readiness probe: Check if Caddy is ready to serve traffic
+          readinessProbe:
+            httpGet:
+              path: /config/
+              port: 2019
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+
+          # Startup probe: Give Caddy time to start
+          startupProbe:
+            httpGet:
+              path: /config/
+              port: 2019
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 12  # Allow up to 60 seconds for startup
+
+          # Security context for the container
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false  # Caddy needs write access for temp files
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_BIND_SERVICE  # Allow binding to ports 80/443
+
+      # Volumes
+      volumes:
+        - name: config-volume
+          persistentVolumeClaim:
+            claimName: lacuna-config-pvc
+        - name: acme-volume
+          persistentVolumeClaim:
+            claimName: lacuna-acme-pvc
+
+      # Image pull secrets (if using private registry)
+      # imagePullSecrets:
+      #   - name: ghcr-secret
+
+      # Pod affinity: Spread pods across nodes for HA
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - lacuna
+                topologyKey: kubernetes.io/hostname
+
+      # Toleration for node taints (if needed)
+      # tolerations:
+      #   - key: "node-role.kubernetes.io/edge"
+      #     operator: "Equal"
+      #     value: "true"
+      #     effect: "NoSchedule"
+
+# Notes:
+# - Update the image path to match your GHCR repository
+# - Adjust replicas based on your traffic and HA requirements
+# - Tune resource limits based on actual usage patterns
+# - Consider adding HorizontalPodAutoscaler for auto-scaling
+# - For production, use specific image tags instead of 'latest'

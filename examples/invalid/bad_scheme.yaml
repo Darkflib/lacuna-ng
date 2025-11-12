@@ -1,0 +1,19 @@
+# INVALID: Contains javascript: URL scheme (security violation)
+# Expected error: Scheme not in allowlist {http, https}
+
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: malicious.example.com
+    hsts: true
+    rules:
+      # This should be rejected - javascript: scheme is not allowed
+      - id: bad-redirect
+        match: prefix
+        from: /click
+        to: javascript:alert('XSS')
+        status: 302

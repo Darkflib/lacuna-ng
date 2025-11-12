@@ -1,0 +1,27 @@
+# Invalid configuration: contains templating characters
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: template.example.com
+    rules:
+      - id: curly-braces
+        match: exact
+        from: /user
+        to: https://example.com/users/{user_id}
+        status: 301
+
+      - id: dollar-sign
+        match: exact
+        from: /env
+        to: https://example.com/$ENV_VAR
+        status: 301
+
+      - id: both-curlies
+        match: prefix
+        from: /api
+        to: https://example.com/api/{version}/endpoint
+        status: 301

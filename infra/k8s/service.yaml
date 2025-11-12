@@ -1,0 +1,129 @@
+# Lacuna v2 - Kubernetes Service
+# Exposes Caddy deployment to external traffic
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lacuna-caddy
+  labels:
+    app: lacuna
+    component: caddy
+    version: v2
+  annotations:
+    # Cloud-specific annotations for load balancer configuration
+    # Uncomment and adjust based on your cloud provider:
+
+    # GKE (Google Kubernetes Engine)
+    # cloud.google.com/load-balancer-type: "External"
+    # networking.gke.io/load-balancer-type: "External"
+
+    # EKS (AWS Elastic Kubernetes Service)
+    # service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    # service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+
+    # AKS (Azure Kubernetes Service)
+    # service.beta.kubernetes.io/azure-load-balancer-internal: "false"
+
+spec:
+  # Service type: LoadBalancer exposes the service externally
+  # Alternative: NodePort for manual load balancer configuration
+  type: LoadBalancer
+
+  # Selector must match deployment pod labels
+  selector:
+    app: lacuna
+    component: caddy
+
+  # Ports exposed by the service
+  ports:
+    # HTTP port (redirects to HTTPS)
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http  # Maps to containerPort 80
+      # nodePort: 30080  # Uncomment for NodePort service
+
+    # HTTPS port (main traffic)
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: https  # Maps to containerPort 443
+      # nodePort: 30443  # Uncomment for NodePort service
+
+  # Session affinity for sticky sessions (optional)
+  # sessionAffinity: ClientIP
+  # sessionAffinityConfig:
+  #   clientIP:
+  #     timeoutSeconds: 10800  # 3 hours
+
+  # External traffic policy
+  # - Cluster: Traffic can be routed to any node (default)
+  # - Local: Traffic only to pods on the same node (preserves client IP)
+  externalTrafficPolicy: Cluster
+
+  # Health check node port (for LoadBalancer type)
+  # healthCheckNodePort: 30012  # Uncomment if needed
+
+# Note: Admin API (port 2019) is intentionally NOT exposed externally
+# for security reasons. Use kubectl port-forward for local admin access:
+#   kubectl port-forward svc/lacuna-caddy 2019:2019
+
+---
+# Optional: Internal service for admin API access (cluster-internal only)
+apiVersion: v1
+kind: Service
+metadata:
+  name: lacuna-caddy-admin
+  labels:
+    app: lacuna
+    component: caddy-admin
+    version: v2
+spec:
+  type: ClusterIP  # Internal only, not exposed externally
+  selector:
+    app: lacuna
+    component: caddy
+
+  ports:
+    - name: admin
+      protocol: TCP
+      port: 2019
+      targetPort: admin  # Maps to containerPort 2019
+
+# Access the admin API using port-forward:
+#   kubectl port-forward svc/lacuna-caddy-admin 2019:2019
+# Then access http://localhost:2019/config/
+
+---
+# Optional: Headless service for direct pod access
+# Useful for debugging and service mesh integration
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: lacuna-caddy-headless
+#   labels:
+#     app: lacuna
+#     component: caddy
+#     version: v2
+# spec:
+#   clusterIP: None  # Headless service
+#   selector:
+#     app: lacuna
+#     component: caddy
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 80
+#       targetPort: http
+#     - name: https
+#       protocol: TCP
+#       port: 443
+#       targetPort: https
+
+# Production recommendations:
+# - For production, use type: LoadBalancer with cloud provider annotations
+# - Consider using an Ingress controller for advanced routing
+# - Set up DDoS protection and rate limiting at the load balancer level
+# - Enable logging and monitoring for the load balancer
+# - Configure health checks to match your readiness probes

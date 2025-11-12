@@ -1,0 +1,54 @@
+# Valid Lacuna v2 configuration for testing
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: example.com
+    hsts: true
+    rules:
+      - id: home
+        match: exact
+        from: /
+        to: https://www.example.org/
+        status: 308
+        keep_query: true
+
+      - id: about
+        match: exact
+        from: /about
+        to: https://www.example.org/about
+        status: 301
+
+      - id: blog
+        match: prefix
+        from: /blog
+        to: https://blog.example.org
+        status: 308
+        keep_query: true
+
+      - id: docs
+        match: prefix
+        from: /docs
+        to: https://docs.example.org
+        status: 308
+
+  - host: old.example.com
+    rules:
+      - id: catch-all
+        match: prefix
+        from: /
+        to: https://new.example.com
+        status: 301
+
+  - host: parked.example.com
+    hsts: false
+    rules:
+      - id: parked
+        match: prefix
+        from: /
+        to: https://about.example.com/parked
+        status: 302
+        keep_query: false

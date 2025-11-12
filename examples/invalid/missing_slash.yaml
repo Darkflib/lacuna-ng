@@ -1,0 +1,33 @@
+# INVALID: 'from' path doesn't start with /
+# Expected error: Path must start with /
+
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: bad-paths.example.com
+    hsts: true
+    rules:
+      # This should be rejected - path must start with /
+      - id: no-slash
+        match: prefix
+        from: blog
+        to: https://blog.example.com
+        status: 308
+
+      # This is valid for comparison
+      - id: valid-path
+        match: prefix
+        from: /docs
+        to: https://docs.example.com
+        status: 308
+
+      # This should also be rejected - empty path
+      - id: empty-path
+        match: exact
+        from: ""
+        to: https://example.com
+        status: 301

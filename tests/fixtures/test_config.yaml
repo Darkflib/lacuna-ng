@@ -1,0 +1,37 @@
+# Simple test configuration for integration tests
+# Minimal config with just enough rules to test all features
+
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  # Single test host with basic rules
+  - host: test.example.com
+    hsts: true
+    rules:
+      # Exact match for homepage
+      - id: home
+        match: exact
+        from: /
+        to: https://www.example.com/
+        status: 308
+        keep_query: true
+
+      # Prefix match for API
+      - id: api
+        match: prefix
+        from: /api
+        to: https://api.example.com
+        status: 307
+        keep_query: true
+
+      # Prefix match without query preservation
+      - id: static
+        match: prefix
+        from: /static
+        to: https://cdn.example.com
+        status: 308
+        keep_query: false
