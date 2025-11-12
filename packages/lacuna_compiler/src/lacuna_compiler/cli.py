@@ -37,7 +37,12 @@ def main(
     validate_only: bool = typer.Option(
         False,
         "--validate-only",
-        help="Only validate and compile, don't promote (lacuna_promote not yet implemented)",
+        help="Only validate and compile, don't promote",
+    ),
+    promote: bool = typer.Option(
+        False,
+        "--promote",
+        help="Promote config with double-buffer validation and rollback",
     ),
 ) -> None:
     """
@@ -47,22 +52,63 @@ def main(
     1. Loads and validates the YAML config using lacuna_schema
     2. Compiles it to Caddy JSON
     3. Writes the result to {out_dir}/config.next.json
-
-    Future: When lacuna_promote is implemented, this will also promote
-    the config unless --validate-only is specified.
+    4. Optionally promotes with double-buffer (--promote)
 
     Examples:
 
         # Compile and validate only
         $ lacuna-compiler examples/domainlist.yaml --validate-only
 
-        # Compile with custom output directory
-        $ lacuna-compiler config.yaml --out-dir /srv/lacuna/config
+        # Compile and promote with double-buffer
+        $ lacuna-compiler config.yaml --out-dir /srv/lacuna/config --promote
 
-        # Use default output directory (./vol/config)
+        # Just compile (no validation, no promotion)
         $ lacuna-compiler examples/domainlist.yaml
     """
     try:
+        # Validate mutually exclusive options
+        if validate_only and promote:
+            typer.secho(
+                "✗ Error: --validate-only and --promote are mutually exclusive",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            sys.exit(1)
+
+        # If --promote is specified, use lacuna_promote
+        if promote:
+            try:
+                from lacuna_promote import PromoteOptions, compile_and_promote
+
+                typer.echo("Promoting with double-buffer validation and rollback...")
+                opts = PromoteOptions(out_dir=out_dir, validate_only=False)
+                active_path = compile_and_promote(yaml_path, opts)
+                typer.secho(
+                    f"✓ Successfully promoted to {active_path}",
+                    fg=typer.colors.GREEN,
+                )
+                sys.exit(0)
+
+            except ImportError:
+                typer.secho(
+                    "✗ lacuna_promote not installed. Install it first:",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                typer.secho(
+                    "   uv pip install -e packages/lacuna_promote",
+                    fg=typer.colors.YELLOW,
+                    err=True,
+                )
+                sys.exit(1)
+
+            except Exception as e:
+                typer.secho(
+                    f"✗ Promotion failed: {e}", fg=typer.colors.RED, err=True
+                )
+                sys.exit(1)
+
+        # Otherwise, just compile (with or without validation)
         # Load and validate YAML
         typer.echo(f"Loading configuration from {yaml_path}...")
         config = load_config(yaml_path)
@@ -81,15 +127,15 @@ def main(
         if validate_only:
             typer.echo("✓ Validation complete (--validate-only mode)")
             typer.echo(
-                "\nNote: Promotion is not yet implemented. "
-                "Use 'caddy validate' and 'caddy reload' manually."
+                "\nTo promote: Use --promote flag or manually run:"
             )
+            typer.echo("  caddy validate --config <path> && caddy reload --config <path>")
         else:
             typer.echo(
-                "\nNote: lacuna_promote is not yet implemented. "
-                "Config written to config.next.json but not promoted."
+                "\n✓ Config written to config.next.json"
             )
-            typer.echo("To apply: caddy validate --config <path> && caddy reload --config <path>")
+            typer.echo("To promote with double-buffer: Use --promote flag")
+            typer.echo("To promote manually: caddy validate --config <path> && caddy reload --config <path>")
 
         sys.exit(0)
 
