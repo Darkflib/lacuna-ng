@@ -72,9 +72,7 @@ def test_http_redirect_server() -> None:
     handler = route["handle"][0]
     assert handler["handler"] == "static_response"
     assert handler["status_code"] == 308
-    assert handler["headers"]["Location"] == [
-        "https://{http.request.host}{http.request.uri}"
-    ]
+    assert handler["headers"]["Location"] == ["https://{http.request.host}{http.request.uri}"]
 
 
 def test_https_server_listen() -> None:
@@ -333,9 +331,7 @@ def test_hsts_header_enabled() -> None:
 
     headers = rule_routes[0]["handle"][0]["response"]["set"]
     assert "Strict-Transport-Security" in headers
-    assert headers["Strict-Transport-Security"] == [
-        "max-age=31536000; includeSubDomains; preload"
-    ]
+    assert headers["Strict-Transport-Security"] == ["max-age=31536000; includeSubDomains; preload"]
 
 
 def test_hsts_header_disabled() -> None:

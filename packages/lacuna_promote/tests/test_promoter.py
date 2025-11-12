@@ -38,9 +38,7 @@ class TestValidateConfig:
 
         # Mock subprocess.run to simulate failed validation
         with mock.patch("subprocess.run") as mock_run:
-            mock_run.return_value = mock.Mock(
-                returncode=1, stdout="", stderr="validation error"
-            )
+            mock_run.return_value = mock.Mock(returncode=1, stdout="", stderr="validation error")
 
             result = validate_config(config_path)
 
@@ -63,9 +61,7 @@ class TestValidateConfig:
         config_path.write_text('{"apps": {}}')
 
         # Mock subprocess.run to raise TimeoutExpired
-        with mock.patch(
-            "subprocess.run", side_effect=subprocess.TimeoutExpired("caddy", 30)
-        ):
+        with mock.patch("subprocess.run", side_effect=subprocess.TimeoutExpired("caddy", 30)):
             result = validate_config(config_path)
 
             assert result is False

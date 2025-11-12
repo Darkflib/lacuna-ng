@@ -23,3 +23,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/lacuna_schema"]
+
+[dependency-groups]
+dev = [
+    "types-requests>=2.32.4.20250913",
+]

@@ -67,9 +67,7 @@ def test_schema_check_cli_missing_file() -> None:
 
 
 @pytest.mark.integration
-def test_compiler_cli_validate_only(
-    temp_output_dir: Path, test_config_path: Path
-) -> None:
+def test_compiler_cli_validate_only(temp_output_dir: Path, test_config_path: Path) -> None:
     """Test lacuna-compiler --validate-only (no Caddy validation)."""
     result = subprocess.run(
         [
@@ -296,9 +294,7 @@ def test_cli_tools_help_messages() -> None:
 
 
 @pytest.mark.integration
-def test_cli_pipeline_integration(
-    temp_output_dir: Path, test_config_path: Path
-) -> None:
+def test_cli_pipeline_integration(temp_output_dir: Path, test_config_path: Path) -> None:
     """Test complete CLI pipeline: check → compile → simulate."""
     # Step 1: Check YAML
     result1 = subprocess.run(

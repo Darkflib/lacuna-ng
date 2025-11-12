@@ -179,15 +179,12 @@ def main(
         raise typer.Exit(1)
 
     if not cases and not request:
-        err_console.print(
-            "[red]Error:[/red] Either --cases or --request is required"
-        )
+        err_console.print("[red]Error:[/red] Either --cases or --request is required")
         raise typer.Exit(1)
 
     if cases and request:
         console.print(
-            "[yellow]Warning:[/yellow] Both --cases and --request provided, "
-            "using --request only"
+            "[yellow]Warning:[/yellow] Both --cases and --request provided, " "using --request only"
         )
 
     # Load config
@@ -237,7 +234,9 @@ def main(
         # Check for unmatched requests
         unmatched = [r for r in results if not r.matched]
         if unmatched:
-            console.print(f"\n[yellow]⚠[/yellow] {len(unmatched)} request(s) did not match any rule")
+            console.print(
+                f"\n[yellow]⚠[/yellow] {len(unmatched)} request(s) did not match any rule"
+            )
 
         # Success summary
         if report.all_matched and not unmatched:

@@ -127,9 +127,7 @@ def test_reload_caddy_mocked_failure(
 
 
 @pytest.mark.integration
-def test_rollback_without_lastgood(
-    temp_output_dir: Path, mock_caddy_success: None
-) -> None:
+def test_rollback_without_lastgood(temp_output_dir: Path, mock_caddy_success: None) -> None:
     """Test rollback fails when lastgood doesn't exist."""
     from lacuna_promote import RollbackError
 

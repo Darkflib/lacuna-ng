@@ -184,9 +184,7 @@ hosts:
         yaml_path.write_text(yaml_content)
 
         out_dir = tmp_path / "config"
-        opts = PromoteOptions(
-            out_dir=out_dir, sentinel_urls=["http://example.com/health"]
-        )
+        opts = PromoteOptions(out_dir=out_dir, sentinel_urls=["http://example.com/health"])
 
         def mock_subprocess(*args, **kwargs):
             """Mock subprocess calls."""
@@ -202,6 +200,7 @@ hosts:
             # Mock requests.get to fail
             with mock.patch("requests.get") as mock_get:
                 import requests
+
                 mock_get.side_effect = requests.RequestException("Connection refused")
 
                 from lacuna_promote import ProbeError
@@ -232,9 +231,7 @@ hosts:
         yaml_path.write_text(yaml_content)
 
         out_dir = tmp_path / "config"
-        opts = PromoteOptions(
-            out_dir=out_dir, sentinel_urls=["http://example.com/health"]
-        )
+        opts = PromoteOptions(out_dir=out_dir, sentinel_urls=["http://example.com/health"])
 
         with mock.patch("subprocess.run") as mock_run:
             mock_run.return_value = mock.Mock(returncode=0, stdout="", stderr="")
@@ -267,9 +264,7 @@ hosts:
         yaml_path.write_text(yaml_content)
 
         out_dir = tmp_path / "config"
-        opts = PromoteOptions(
-            out_dir=out_dir, sentinel_urls=["http://example.com/health"]
-        )
+        opts = PromoteOptions(out_dir=out_dir, sentinel_urls=["http://example.com/health"])
 
         with mock.patch("subprocess.run") as mock_run:
             mock_run.return_value = mock.Mock(returncode=0, stdout="", stderr="")
@@ -379,9 +374,7 @@ hosts:
         opts = PromoteOptions(out_dir=out_dir)
 
         with mock.patch("subprocess.run") as mock_run:
-            mock_run.return_value = mock.Mock(
-                returncode=1, stdout="", stderr="Invalid JSON syntax"
-            )
+            mock_run.return_value = mock.Mock(returncode=1, stdout="", stderr="Invalid JSON syntax")
 
             try:
                 compile_and_promote(yaml_path, opts)

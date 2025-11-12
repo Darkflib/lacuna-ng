@@ -31,7 +31,7 @@ class TestRule:
         rule = Rule(
             id="test-rule",
             match="exact",
-            **{"from": "/path", "to": "https://example.com", "status": 301}
+            **{"from": "/path", "to": "https://example.com", "status": 301},
         )
         assert rule.id == "test-rule"
         assert rule.match == "exact"
@@ -55,7 +55,7 @@ class TestRule:
             rule = Rule(
                 id=rule_id,
                 match="exact",
-                **{"from": "/", "to": "https://example.com", "status": 301}
+                **{"from": "/", "to": "https://example.com", "status": 301},
             )
             assert rule.id == rule_id
 
@@ -76,7 +76,7 @@ class TestRule:
                 Rule(
                     id=rule_id,
                     match="exact",
-                    **{"from": "/", "to": "https://example.com", "status": 301}
+                    **{"from": "/", "to": "https://example.com", "status": 301},
                 )
             assert "id" in str(exc_info.value).lower()
 
@@ -86,25 +86,21 @@ class TestRule:
             Rule(
                 id="test",
                 match="exact",
-                **{"from": "no-slash", "to": "https://example.com", "status": 301}
+                **{"from": "no-slash", "to": "https://example.com", "status": 301},
             )
         assert "must start with /" in str(exc_info.value)
 
     def test_scheme_allowlist_http(self) -> None:
         """Test that http:// scheme is allowed."""
         rule = Rule(
-            id="test",
-            match="exact",
-            **{"from": "/", "to": "http://example.com", "status": 301}
+            id="test", match="exact", **{"from": "/", "to": "http://example.com", "status": 301}
         )
         assert rule.to == "http://example.com"
 
     def test_scheme_allowlist_https(self) -> None:
         """Test that https:// scheme is allowed."""
         rule = Rule(
-            id="test",
-            match="exact",
-            **{"from": "/", "to": "https://example.com", "status": 301}
+            id="test", match="exact", **{"from": "/", "to": "https://example.com", "status": 301}
         )
         assert rule.to == "https://example.com"
 
@@ -114,7 +110,7 @@ class TestRule:
             Rule(
                 id="test",
                 match="exact",
-                **{"from": "/", "to": "javascript:alert('XSS')", "status": 301}
+                **{"from": "/", "to": "javascript:alert('XSS')", "status": 301},
             )
         assert "http or https scheme" in str(exc_info.value)
 
@@ -124,7 +120,7 @@ class TestRule:
             Rule(
                 id="test",
                 match="exact",
-                **{"from": "/", "to": "data:text/html,<script>", "status": 301}
+                **{"from": "/", "to": "data:text/html,<script>", "status": 301},
             )
         assert "http or https scheme" in str(exc_info.value)
 
@@ -132,9 +128,7 @@ class TestRule:
         """Test that file: scheme is rejected."""
         with pytest.raises(ValidationError) as exc_info:
             Rule(
-                id="test",
-                match="exact",
-                **{"from": "/", "to": "file:///etc/passwd", "status": 301}
+                id="test", match="exact", **{"from": "/", "to": "file:///etc/passwd", "status": 301}
             )
         assert "http or https scheme" in str(exc_info.value)
 
@@ -144,7 +138,7 @@ class TestRule:
             Rule(
                 id="test",
                 match="exact",
-                **{"from": "/", "to": "https://example.com/{user}", "status": 301}
+                **{"from": "/", "to": "https://example.com/{user}", "status": 301},
             )
         assert "templating character" in str(exc_info.value)
 
@@ -154,7 +148,7 @@ class TestRule:
             Rule(
                 id="test",
                 match="exact",
-                **{"from": "/", "to": "https://example.com/$VAR", "status": 301}
+                **{"from": "/", "to": "https://example.com/$VAR", "status": 301},
             )
         assert "templating character" in str(exc_info.value)
 
@@ -165,7 +159,7 @@ class TestRule:
             rule = Rule(
                 id="test",
                 match="exact",
-                **{"from": "/", "to": "https://example.com", "status": status}
+                **{"from": "/", "to": "https://example.com", "status": status},
             )
             assert rule.status == status
 
@@ -177,7 +171,7 @@ class TestRule:
                 Rule(
                     id="test",
                     match="exact",
-                    **{"from": "/", "to": "https://example.com", "status": status}
+                    **{"from": "/", "to": "https://example.com", "status": status},
                 )
 
     def test_match_type_valid(self) -> None:
@@ -186,7 +180,7 @@ class TestRule:
             rule = Rule(
                 id="test",
                 match=match_type,  # type: ignore
-                **{"from": "/", "to": "https://example.com", "status": 301}
+                **{"from": "/", "to": "https://example.com", "status": 301},
             )
             assert rule.match == match_type
 
@@ -196,7 +190,7 @@ class TestRule:
             Rule(
                 id="test",
                 match="regex",  # type: ignore
-                **{"from": "/", "to": "https://example.com", "status": 301}
+                **{"from": "/", "to": "https://example.com", "status": 301},
             )
 
 
@@ -212,7 +206,7 @@ class TestHost:
                 Rule(
                     id="r1",
                     match="exact",
-                    **{"from": "/", "to": "https://example.com", "status": 301}
+                    **{"from": "/", "to": "https://example.com", "status": 301},
                 )
             ],
         )
@@ -228,7 +222,7 @@ class TestHost:
                 Rule(
                     id="r1",
                     match="exact",
-                    **{"from": "/", "to": "https://example.com", "status": 301}
+                    **{"from": "/", "to": "https://example.com", "status": 301},
                 )
             ],
         )
@@ -243,12 +237,12 @@ class TestHost:
                     Rule(
                         id="duplicate",
                         match="exact",
-                        **{"from": "/a", "to": "https://example.com/a", "status": 301}
+                        **{"from": "/a", "to": "https://example.com/a", "status": 301},
                     ),
                     Rule(
                         id="duplicate",
                         match="exact",
-                        **{"from": "/b", "to": "https://example.com/b", "status": 301}
+                        **{"from": "/b", "to": "https://example.com/b", "status": 301},
                     ),
                 ],
             )
@@ -262,12 +256,12 @@ class TestHost:
                 Rule(
                     id="rule1",
                     match="exact",
-                    **{"from": "/a", "to": "https://example.com/a", "status": 301}
+                    **{"from": "/a", "to": "https://example.com/a", "status": 301},
                 ),
                 Rule(
                     id="rule2",
                     match="exact",
-                    **{"from": "/b", "to": "https://example.com/b", "status": 301}
+                    **{"from": "/b", "to": "https://example.com/b", "status": 301},
                 ),
             ],
         )
@@ -289,7 +283,7 @@ class TestConfig:
                         Rule(
                             id="r1",
                             match="exact",
-                            **{"from": "/", "to": "https://example.com", "status": 301}
+                            **{"from": "/", "to": "https://example.com", "status": 301},
                         )
                     ],
                 )

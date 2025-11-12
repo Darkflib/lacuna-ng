@@ -102,9 +102,7 @@ def main(
                 sys.exit(1)
 
             except Exception as e:
-                typer.secho(
-                    f"✗ Promotion failed: {e}", fg=typer.colors.RED, err=True
-                )
+                typer.secho(f"✗ Promotion failed: {e}", fg=typer.colors.RED, err=True)
                 sys.exit(1)
 
         # Otherwise, just compile (with or without validation)
@@ -114,9 +112,7 @@ def main(
 
         # Report stats
         total_rules = sum(len(host.rules) for host in config.hosts)
-        typer.echo(
-            f"✓ Validated: {len(config.hosts)} hosts, {total_rules} total rules"
-        )
+        typer.echo(f"✓ Validated: {len(config.hosts)} hosts, {total_rules} total rules")
 
         # Compile to Caddy JSON and write
         typer.echo("Compiling to Caddy JSON...")
@@ -125,16 +121,14 @@ def main(
 
         if validate_only:
             typer.echo("✓ Validation complete (--validate-only mode)")
-            typer.echo(
-                "\nTo promote: Use --promote flag or manually run:"
-            )
+            typer.echo("\nTo promote: Use --promote flag or manually run:")
             typer.echo("  caddy validate --config <path> && caddy reload --config <path>")
         else:
-            typer.echo(
-                "\n✓ Config written to config.next.json"
-            )
+            typer.echo("\n✓ Config written to config.next.json")
             typer.echo("To promote with double-buffer: Use --promote flag")
-            typer.echo("To promote manually: caddy validate --config <path> && caddy reload --config <path>")
+            typer.echo(
+                "To promote manually: caddy validate --config <path> && caddy reload --config <path>"
+            )
 
         sys.exit(0)
 

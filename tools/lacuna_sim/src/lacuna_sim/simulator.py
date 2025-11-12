@@ -275,8 +275,7 @@ def parse_cases_file(path: Path) -> list[Request]:
 
             if len(parts) < 2:
                 raise ValueError(
-                    f"Invalid format at line {line_num}: '{line}'\n"
-                    f"Expected: HOST PATH [QUERY]"
+                    f"Invalid format at line {line_num}: '{line}'\n" f"Expected: HOST PATH [QUERY]"
                 )
 
             host = parts[0]

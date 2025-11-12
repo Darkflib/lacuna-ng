@@ -59,9 +59,7 @@ class Rule(BaseModel):
         forbidden_chars = ["{", "}", "$"]
         for char in forbidden_chars:
             if char in v:
-                raise ValueError(
-                    f"URL must not contain templating character '{char}': {v}"
-                )
+                raise ValueError(f"URL must not contain templating character '{char}': {v}")
 
         # Check scheme allowlist
         if not (v.startswith("http://") or v.startswith("https://")):

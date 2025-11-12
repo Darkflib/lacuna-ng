@@ -33,9 +33,7 @@ def _compute_content_sha256(apps_block: dict[str, Any]) -> str:
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
 
 
-def _build_exact_match_handler(
-    rule: Rule, hsts_enabled: bool
-) -> list[dict[str, Any]]:
+def _build_exact_match_handler(rule: Rule, hsts_enabled: bool) -> list[dict[str, Any]]:
     """
     Build handler for exact path match.
 
@@ -228,9 +226,7 @@ def _build_http_redirect_server() -> dict[str, Any]:
                 "handle": [
                     {
                         "handler": "static_response",
-                        "headers": {
-                            "Location": ["https://{http.request.host}{http.request.uri}"]
-                        },
+                        "headers": {"Location": ["https://{http.request.host}{http.request.uri}"]},
                         "status_code": 308,
                     }
                 ]
