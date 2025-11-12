@@ -6,6 +6,9 @@ requires-python = ">=3.12"
 authors = [{ name = "Lacuna Team" }]
 readme = "README.md"
 license = { text = "MIT" }
+dependencies = [
+    "types-pyyaml>=6.0.12.20250915",
+]
 
 [tool.uv.workspace]
 members = [
