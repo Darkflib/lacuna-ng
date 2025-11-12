@@ -1,0 +1,66 @@
+{
+  "_comment": "This is a reference output for test_config.yaml",
+  "_note": "Actual output will have _meta block with timestamps and hashes",
+  "apps": {
+    "http": {
+      "servers": {
+        "http": {
+          "listen": [":80"],
+          "routes": [
+            {
+              "match": [{"host": ["test.example.com"]}],
+              "handle": [
+                {
+                  "handler": "static_response",
+                  "status_code": 308,
+                  "headers": {
+                    "Location": ["https://{http.request.host}{http.request.uri}"]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "https": {
+          "listen": [":443"],
+          "routes": [
+            {
+              "match": [{"host": ["test.example.com"]}],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "_comment": "Exact match for home rule",
+                      "match": [{"path": ["/"]}],
+                      "handle": [
+                        {
+                          "handler": "headers",
+                          "response": {
+                            "set": {
+                              "X-Lacuna-Rule": ["home"],
+                              "Strict-Transport-Security": [
+                                "max-age=31536000; includeSubDomains; preload"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "handler": "static_response",
+                          "status_code": 308,
+                          "headers": {
+                            "Location": ["https://www.example.com/{http.request.uri.query}"]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

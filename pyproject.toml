@@ -23,7 +23,8 @@ dev-dependencies = [
     "ruff>=0.7.0",
     "black>=24.0.0",
     "hypothesis>=6.0.0",
-    "pre-commit>=3.0.0"
+    "pre-commit>=3.0.0",
+    "yamllint>=1.35.0"
 ]
 
 [tool.mypy]
@@ -42,8 +43,13 @@ line-length = 100
 target-version = ["py312"]
 
 [tool.pytest.ini_options]
-testpaths = ["packages/*/tests", "tools/*/tests"]
+testpaths = ["packages/*/tests", "tools/*/tests", "tests/integration"]
 addopts = "-v --cov=packages --cov=tools --cov-report=term --cov-report=html"
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+markers = [
+    "integration: end-to-end integration tests",
+    "requires_caddy: tests that require Caddy binary",
+    "slow: slow-running tests"
+]
