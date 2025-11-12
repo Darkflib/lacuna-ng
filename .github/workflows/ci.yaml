@@ -192,6 +192,9 @@ jobs:
   security:
     name: Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
     timeout-minutes: 10
     continue-on-error: true
     steps:
