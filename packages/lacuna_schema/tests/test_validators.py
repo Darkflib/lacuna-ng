@@ -198,12 +198,12 @@ class TestSortRulesByPathLength:
                 id="r2",
                 match="exact",
                 **{"from": "/about", "to": "https://example.com", "status": 301},
-            ),
+            ),  # type: ignore[arg-type]
             Rule(
                 id="r3",
                 match="exact",
                 **{"from": "/about/team", "to": "https://example.com", "status": 301},
-            ),
+            ),  # type: ignore[arg-type]
         ]
         sorted_rules = sort_rules_by_path_length(rules)
 
@@ -219,12 +219,12 @@ class TestSortRulesByPathLength:
                 id="r2",
                 match="prefix",
                 **{"from": "/api", "to": "https://example.com", "status": 301},
-            ),
+            ),  # type: ignore[arg-type]
             Rule(
                 id="r3",
                 match="prefix",
                 **{"from": "/api/v2", "to": "https://example.com", "status": 301},
-            ),
+            ),  # type: ignore[arg-type]
         ]
         sorted_rules = sort_rules_by_path_length(rules)
 
@@ -239,14 +239,14 @@ class TestSortRulesByPathLength:
                 id="p1",
                 match="prefix",
                 **{"from": "/blog", "to": "https://example.com", "status": 301},
-            ),
+            ),  # type: ignore[arg-type]
             Rule(id="e1", match="exact", **{"from": "/", "to": "https://example.com", "status": 301}),  # type: ignore[arg-type]
             Rule(id="p2", match="prefix", **{"from": "/", "to": "https://example.com", "status": 301}),  # type: ignore[arg-type]
             Rule(
                 id="e2",
                 match="exact",
                 **{"from": "/about", "to": "https://example.com", "status": 301},
-            ),
+            ),  # type: ignore[arg-type]
         ]
         sorted_rules = sort_rules_by_path_length(rules)
 
@@ -280,12 +280,12 @@ class TestSortRulesAPI:
                     id="r1",
                     match="prefix",
                     **{"from": "/", "to": "https://example.com", "status": 301},
-                ),
+                ),  # type: ignore[arg-type]
                 Rule(
                     id="r2",
                     match="exact",
                     **{"from": "/about", "to": "https://example.com", "status": 301},
-                ),
+                ),  # type: ignore[arg-type]
             ],
         )
 
@@ -313,7 +313,7 @@ class TestSortRulesAPI:
                     id="r1",
                     match="prefix",
                     **{"from": "/", "to": "https://example.com", "status": 301},
-                ),
+                ),  # type: ignore[arg-type]
             ],
         )
 

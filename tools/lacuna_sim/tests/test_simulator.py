@@ -42,17 +42,17 @@ def basic_config() -> Config:
                         id="home",
                         match="exact",
                         **{"from": "/", "to": "https://www.example.org/", "status": 308},
-                    ),
+                    ),  # type: ignore[arg-type]
                     Rule(
                         id="blog",
                         match="prefix",
                         **{"from": "/blog", "to": "https://blog.example.org", "status": 308},
-                    ),
+                    ),  # type: ignore[arg-type]
                     Rule(
                         id="api",
                         match="prefix",
                         **{"from": "/api", "to": "https://api.example.org", "status": 307},
-                    ),
+                    ),  # type: ignore[arg-type]
                 ],
             ),
         ],
@@ -75,7 +75,7 @@ def complex_config() -> Config:
                         id="root-prefix",
                         match="prefix",
                         **{"from": "/", "to": "https://fallback.example.org", "status": 308},
-                    ),
+                    ),  # type: ignore[arg-type]
                     Rule(
                         id="blog-post-exact",
                         match="exact",
@@ -89,12 +89,12 @@ def complex_config() -> Config:
                         id="blog-prefix",
                         match="prefix",
                         **{"from": "/blog", "to": "https://blog.example.org", "status": 308},
-                    ),
+                    ),  # type: ignore[arg-type]
                     Rule(
                         id="docs-exact",
                         match="exact",
                         **{"from": "/docs", "to": "https://docs.example.org", "status": 308},
-                    ),
+                    ),  # type: ignore[arg-type]
                     Rule(
                         id="never-matched",
                         match="exact",
@@ -365,7 +365,7 @@ class TestDeadRuleDetection:
                             id="only-rule",
                             match="exact",
                             **{"from": "/test", "to": "https://test.com", "status": 308},
-                        ),
+                        ),  # type: ignore[arg-type]
                     ],
                 ),
             ],

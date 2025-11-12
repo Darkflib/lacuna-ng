@@ -281,12 +281,12 @@ def test_x_lacuna_rule_header() -> None:
                         id="rule1",
                         match="exact",
                         **{"from": "/one", "to": "https://target.com/1", "status": 301},
-                    ),
+                    ),  # type: ignore[arg-type]
                     Rule(
                         id="rule2",
                         match="prefix",
                         **{"from": "/two", "to": "https://target.com/2", "status": 302},
-                    ),
+                    ),  # type: ignore[arg-type]
                 ],
             )
         ],
@@ -484,12 +484,12 @@ def test_deterministic_output() -> None:
                         id="home",
                         match="exact",
                         **{"from": "/", "to": "https://target.com/", "status": 308},
-                    ),
+                    ),  # type: ignore[arg-type]
                     Rule(
                         id="blog",
                         match="prefix",
                         **{"from": "/blog", "to": "https://blog.target.com", "status": 308},
-                    ),
+                    ),  # type: ignore[arg-type]
                 ],
             )
         ],

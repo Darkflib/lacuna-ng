@@ -232,12 +232,12 @@ class TestHost:
                         id="duplicate",
                         match="exact",
                         **{"from": "/a", "to": "https://example.com/a", "status": 301},
-                    ),
+                    ),  # type: ignore[arg-type]
                     Rule(
                         id="duplicate",
                         match="exact",
                         **{"from": "/b", "to": "https://example.com/b", "status": 301},
-                    ),
+                    ),  # type: ignore[arg-type]
                 ],
             )
         assert "duplicate" in str(exc_info.value).lower()
@@ -251,12 +251,12 @@ class TestHost:
                     id="rule1",
                     match="exact",
                     **{"from": "/a", "to": "https://example.com/a", "status": 301},  # type: ignore[arg-type]
-                ),
+                ),  # type: ignore[arg-type]
                 Rule(
                     id="rule2",
                     match="exact",
                     **{"from": "/b", "to": "https://example.com/b", "status": 301},  # type: ignore[arg-type]
-                ),
+                ),  # type: ignore[arg-type]
             ],
         )
         assert len(host.rules) == 2
