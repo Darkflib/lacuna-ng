@@ -1,0 +1,49 @@
+[project]
+name = "lacuna"
+version = "2.0.0-dev"
+description = "KISS redirection service with Caddy"
+requires-python = ">=3.12"
+authors = [{ name = "Lacuna Team" }]
+readme = "README.md"
+license = { text = "MIT" }
+
+[tool.uv.workspace]
+members = [
+    "packages/lacuna_schema",
+    "packages/lacuna_compiler",
+    "packages/lacuna_promote",
+    "tools/lacuna_sim"
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "mypy>=1.11.0",
+    "ruff>=0.7.0",
+    "black>=24.0.0",
+    "hypothesis>=6.0.0",
+    "pre-commit>=3.0.0"
+]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.pytest.ini_options]
+testpaths = ["packages/*/tests", "tools/*/tests"]
+addopts = "-v --cov=packages --cov=tools --cov-report=term --cov-report=html"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

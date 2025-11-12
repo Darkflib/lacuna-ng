@@ -1,0 +1,80 @@
+# Lacuna v2 - Docker Compose Configuration
+# Quick start for local development and testing
+
+services:
+  caddy:
+    # Build from local Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+
+    # Container name for easy reference
+    container_name: lacuna-caddy
+
+    # Expose HTTP, HTTPS, and Admin API ports
+    ports:
+      - "80:80"       # HTTP (redirects to HTTPS)
+      - "443:443"     # HTTPS (main traffic)
+      - "2019:2019"   # Admin API (loopback binding via config)
+
+    # Volume mounts for persistence
+    volumes:
+      # Config buffer directory (contains next/active/lastgood JSON files)
+      - ./vol/config:/srv/lacuna/config:rw
+      # ACME cache for Let's Encrypt certificates
+      - ./vol/caddy:/data:rw
+
+    # Environment variables
+    environment:
+      # Bind admin API to loopback for security
+      - CADDY_ADMIN=127.0.0.1:2019
+
+    # Health check to verify service is responding
+    # Test a sentinel path and expect a redirect response
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:2019/config/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+    # Restart policy for production-like behavior
+    restart: unless-stopped
+
+    # Network mode (default bridge)
+    # For production, consider using a custom network
+
+    # Resource limits (optional, uncomment for production)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 512M
+    #     reservations:
+    #       cpus: '0.5'
+    #       memory: 128M
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        labels: "app=lacuna,service=caddy"
+
+# Note: Before running, ensure vol/config/config.active.json exists
+# You can create it using:
+#   mkdir -p vol/config vol/caddy
+#   uv run lacuna-compiler examples/domainlist.yaml --out-dir ./vol/config
+
+# Start the service:
+#   docker compose up -d
+#
+# View logs:
+#   docker compose logs -f caddy
+#
+# Stop the service:
+#   docker compose down
+#
+# Rebuild after Dockerfile changes:
+#   docker compose up --build -d

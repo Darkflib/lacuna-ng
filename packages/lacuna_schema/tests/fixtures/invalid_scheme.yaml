@@ -1,0 +1,27 @@
+# Invalid configuration: uses javascript: scheme (security risk)
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: malicious.example.com
+    rules:
+      - id: xss-attempt
+        match: exact
+        from: /
+        to: javascript:alert('XSS')
+        status: 301
+
+      - id: data-uri
+        match: exact
+        from: /data
+        to: data:text/html,<script>alert('XSS')</script>
+        status: 301
+
+      - id: file-scheme
+        match: exact
+        from: /file
+        to: file:///etc/passwd
+        status: 301

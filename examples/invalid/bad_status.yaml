@@ -1,0 +1,33 @@
+# INVALID: Uses non-redirect HTTP status codes
+# Expected error: Status must be one of 301, 302, 303, 307, 308
+
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: wrong-status.example.com
+    hsts: true
+    rules:
+      # This should be rejected - 200 is not a redirect status
+      - id: ok-response
+        match: exact
+        from: /
+        to: https://example.com/
+        status: 200
+
+      # This would also fail - 404 is not a redirect
+      - id: not-found
+        match: prefix
+        from: /missing
+        to: https://example.com/404
+        status: 404
+
+      # This would also fail - 500 is a server error
+      - id: error
+        match: prefix
+        from: /error
+        to: https://example.com/error
+        status: 500

@@ -1,0 +1,71 @@
+# Lacuna v2 - Comprehensive Example Configuration
+# This config demonstrates all features: exact/prefix matches, multiple status codes,
+# HSTS control, query preservation, and multiple hosts
+
+version: 1
+
+# Global defaults applied to all hosts unless overridden
+defaults:
+  hsts: true          # Enable HSTS by default for security
+  keep_query: true    # Preserve query strings by default
+
+hosts:
+  # Production host with multiple redirect rules
+  - host: prod.example.com
+    hsts: true
+    rules:
+      # Exact match for homepage - must match path exactly
+      - id: home
+        match: exact
+        from: /
+        to: https://www.example.org/
+        status: 308         # Permanent redirect, method preserved
+        keep_query: true
+
+      # Prefix match for blog - matches /blog and /blog/*
+      - id: blog
+        match: prefix
+        from: /blog
+        to: https://blog.example.org
+        status: 308
+        keep_query: true    # Query strings like ?page=2 are preserved
+
+      # Prefix match for documentation
+      - id: docs
+        match: prefix
+        from: /docs
+        to: https://docs.example.org
+        status: 308
+        keep_query: false   # Override default, don't keep query
+
+      # API endpoints with temporary redirect
+      - id: api
+        match: prefix
+        from: /api
+        to: https://api.example.org
+        status: 307         # Temporary redirect, method preserved
+        keep_query: true
+
+  # Legacy domain redirecting everything to new domain
+  - host: old.example.com
+    hsts: true
+    rules:
+      # Catch-all prefix rule - matches everything
+      - id: catch-all
+        match: prefix
+        from: /
+        to: https://new.example.com
+        status: 301         # Permanent redirect (SEO-friendly)
+        keep_query: true
+
+  # Parked domain with HSTS disabled (not ready for production)
+  - host: parked.example.com
+    hsts: false           # HSTS off for parked/development domains
+    rules:
+      # Temporary redirect to holding page
+      - id: parked
+        match: prefix
+        from: /
+        to: https://about.example.com/parked
+        status: 302         # Temporary redirect
+        keep_query: false

@@ -1,0 +1,41 @@
+# Lacuna v2 - Caddy Edge Server
+# Base image: Official Caddy 2.8 with HTTPS support
+FROM caddy:2.8
+
+# Labels for container metadata
+LABEL org.opencontainers.image.title="Lacuna Caddy"
+LABEL org.opencontainers.image.description="KISS redirection service edge server"
+LABEL org.opencontainers.image.vendor="Lacuna Project"
+LABEL org.opencontainers.image.version="2.0.0"
+
+# Create necessary directories
+RUN mkdir -p /srv/lacuna/config /data
+
+# Ensure proper permissions
+RUN chown -R caddy:caddy /srv/lacuna /data
+
+# Config file location (will be mounted as volume)
+# Active config: /srv/lacuna/config/config.active.json
+# ACME cache: /data (Caddy's default)
+
+# Expose ports
+# 80: HTTP (redirects to HTTPS)
+# 443: HTTPS (main traffic)
+# 2019: Admin API (bound to loopback for security)
+EXPOSE 80 443 2019
+
+# Health check using wget to verify Caddy is responding
+# Check admin API on localhost for liveness
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:2019/config/ || exit 1
+
+# Set working directory
+WORKDIR /srv/lacuna
+
+# Default command: run Caddy with JSON config
+# Admin API bound to loopback for security (127.0.0.1:2019)
+# Can be overridden via environment variable CADDY_ADMIN
+CMD ["caddy", "run", "--config", "/srv/lacuna/config/config.active.json", "--adapter", ""]
+
+# Note: The empty --adapter flag tells Caddy to use the config as-is (JSON format)
+# without attempting to parse it as a Caddyfile

@@ -1,0 +1,18 @@
+# Lacuna v2 - Minimal Valid Configuration
+# This is the simplest possible valid config - useful for testing and learning
+
+version: 1
+
+defaults:
+  hsts: true
+  keep_query: true
+
+hosts:
+  - host: example.com
+    hsts: true
+    rules:
+      - id: home
+        match: exact
+        from: /
+        to: https://www.example.com/
+        status: 308
