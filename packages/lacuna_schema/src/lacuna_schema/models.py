@@ -63,9 +63,7 @@ class Rule(BaseModel):
 
         # Check scheme allowlist
         if not (v.startswith("http://") or v.startswith("https://")):
-            raise ValueError(
-                f"URL must use http or https scheme (not javascript:, data:, file:, etc.): {v}"
-            )
+            raise ValueError(f"URL must use http or https scheme (not javascript:, data:, file:, etc.): {v}")
 
         return v
 
@@ -100,9 +98,7 @@ class Host(BaseModel):
             seen_ids.add(rule.id)
 
         if duplicates:
-            raise ValueError(
-                f"Duplicate rule IDs found in host '{self.host}': {', '.join(sorted(set(duplicates)))}"
-            )
+            raise ValueError(f"Duplicate rule IDs found in host '{self.host}': {', '.join(sorted(set(duplicates)))}")
 
         return self
 

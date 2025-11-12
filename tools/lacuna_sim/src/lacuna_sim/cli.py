@@ -110,9 +110,7 @@ def parse_request_arg(request_str: str) -> Request:
     parts = request_str.split(None, 2)
 
     if len(parts) < 2:
-        raise ValueError(
-            f"Invalid request format: '{request_str}'\n" f"Expected: HOST PATH [QUERY]"
-        )
+        raise ValueError(f"Invalid request format: '{request_str}'\nExpected: HOST PATH [QUERY]")
 
     host = parts[0]
     path = parts[1]
@@ -183,9 +181,7 @@ def main(
         raise typer.Exit(1)
 
     if cases and request:
-        console.print(
-            "[yellow]Warning:[/yellow] Both --cases and --request provided, " "using --request only"
-        )
+        console.print("[yellow]Warning:[/yellow] Both --cases and --request provided, using --request only")
 
     # Load config
     try:
@@ -234,9 +230,7 @@ def main(
         # Check for unmatched requests
         unmatched = [r for r in results if not r.matched]
         if unmatched:
-            console.print(
-                f"\n[yellow]⚠[/yellow] {len(unmatched)} request(s) did not match any rule"
-            )
+            console.print(f"\n[yellow]⚠[/yellow] {len(unmatched)} request(s) did not match any rule")
 
         # Success summary
         if report.all_matched and not unmatched:

@@ -41,9 +41,9 @@ def test_golden_file_match(example_yaml_path: Path, golden_json_path: Path) -> N
     golden_meta = golden.pop("_meta")
 
     # Content SHA should match (since apps block should be identical)
-    assert (
-        compiled_meta["content_sha256"] == golden_meta["content_sha256"]
-    ), "Content SHA256 mismatch - apps block has changed"
+    assert compiled_meta["content_sha256"] == golden_meta["content_sha256"], (
+        "Content SHA256 mismatch - apps block has changed"
+    )
 
     # Compare the apps block (deterministic)
     # Use JSON serialization for comparison to ensure stable ordering
@@ -66,9 +66,7 @@ def test_golden_file_match(example_yaml_path: Path, golden_json_path: Path) -> N
         if len(compiled_lines) != len(golden_lines):
             print(f"\nLength mismatch: golden={len(golden_lines)}, compiled={len(compiled_lines)}")
 
-    assert (
-        compiled_json == golden_json
-    ), "Compiled output does not match golden file - see diff above"
+    assert compiled_json == golden_json, "Compiled output does not match golden file - see diff above"
 
 
 def test_golden_file_exists(golden_json_path: Path) -> None:
@@ -154,9 +152,7 @@ def test_deterministic_compilation(example_yaml_path: Path) -> None:
     json2 = json.dumps(result2, sort_keys=True)
     json3 = json.dumps(result3, sort_keys=True)
 
-    assert (
-        json1 == json2 == json3
-    ), "Compiler is not deterministic - multiple compilations produced different output"
+    assert json1 == json2 == json3, "Compiler is not deterministic - multiple compilations produced different output"
 
 
 def test_golden_has_all_hosts(golden_json_path: Path, example_yaml_path: Path) -> None:
@@ -173,9 +169,7 @@ def test_golden_has_all_hosts(golden_json_path: Path, example_yaml_path: Path) -
     routes = data["apps"]["http"]["servers"]["https"]["routes"]
     golden_hosts = {route["match"][0]["host"][0] for route in routes}
 
-    assert (
-        golden_hosts == expected_hosts
-    ), f"Host mismatch - expected: {expected_hosts}, got: {golden_hosts}"
+    assert golden_hosts == expected_hosts, f"Host mismatch - expected: {expected_hosts}, got: {golden_hosts}"
 
 
 def test_golden_has_required_headers(golden_json_path: Path) -> None:
@@ -211,6 +205,4 @@ def test_golden_has_required_headers(golden_json_path: Path) -> None:
 
             check_handlers(handlers)
 
-            assert (
-                found_lacuna_header
-            ), f"X-Lacuna-Rule header not found in rule for host {host_name}"
+            assert found_lacuna_header, f"X-Lacuna-Rule header not found in rule for host {host_name}"

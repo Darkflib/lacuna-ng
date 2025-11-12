@@ -148,15 +148,9 @@ class TestDetectDuplicateIds:
     def test_no_duplicates(self) -> None:
         """Test with no duplicate IDs."""
         rules = [
-            Rule(
-                id="r1", match="exact", **{"from": "/a", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r2", match="exact", **{"from": "/b", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r3", match="exact", **{"from": "/c", "to": "https://example.com", "status": 301}
-            ),
+            Rule(id="r1", match="exact", **{"from": "/a", "to": "https://example.com", "status": 301}),
+            Rule(id="r2", match="exact", **{"from": "/b", "to": "https://example.com", "status": 301}),
+            Rule(id="r3", match="exact", **{"from": "/c", "to": "https://example.com", "status": 301}),
         ]
         duplicates = detect_duplicate_ids(rules)
         assert duplicates == []
@@ -164,15 +158,9 @@ class TestDetectDuplicateIds:
     def test_single_duplicate(self) -> None:
         """Test with a single duplicate ID."""
         rules = [
-            Rule(
-                id="r1", match="exact", **{"from": "/a", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r2", match="exact", **{"from": "/b", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r1", match="exact", **{"from": "/c", "to": "https://example.com", "status": 301}
-            ),
+            Rule(id="r1", match="exact", **{"from": "/a", "to": "https://example.com", "status": 301}),
+            Rule(id="r2", match="exact", **{"from": "/b", "to": "https://example.com", "status": 301}),
+            Rule(id="r1", match="exact", **{"from": "/c", "to": "https://example.com", "status": 301}),
         ]
         duplicates = detect_duplicate_ids(rules)
         assert duplicates == ["r1"]
@@ -180,18 +168,10 @@ class TestDetectDuplicateIds:
     def test_multiple_duplicates(self) -> None:
         """Test with multiple duplicate IDs."""
         rules = [
-            Rule(
-                id="r1", match="exact", **{"from": "/a", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r2", match="exact", **{"from": "/b", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r1", match="exact", **{"from": "/c", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r2", match="exact", **{"from": "/d", "to": "https://example.com", "status": 301}
-            ),
+            Rule(id="r1", match="exact", **{"from": "/a", "to": "https://example.com", "status": 301}),
+            Rule(id="r2", match="exact", **{"from": "/b", "to": "https://example.com", "status": 301}),
+            Rule(id="r1", match="exact", **{"from": "/c", "to": "https://example.com", "status": 301}),
+            Rule(id="r2", match="exact", **{"from": "/d", "to": "https://example.com", "status": 301}),
         ]
         duplicates = detect_duplicate_ids(rules)
         assert set(duplicates) == {"r1", "r2"}
@@ -199,15 +179,9 @@ class TestDetectDuplicateIds:
     def test_triple_duplicate(self) -> None:
         """Test with an ID appearing three times."""
         rules = [
-            Rule(
-                id="r1", match="exact", **{"from": "/a", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r1", match="exact", **{"from": "/b", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="r1", match="exact", **{"from": "/c", "to": "https://example.com", "status": 301}
-            ),
+            Rule(id="r1", match="exact", **{"from": "/a", "to": "https://example.com", "status": 301}),
+            Rule(id="r1", match="exact", **{"from": "/b", "to": "https://example.com", "status": 301}),
+            Rule(id="r1", match="exact", **{"from": "/c", "to": "https://example.com", "status": 301}),
         ]
         duplicates = detect_duplicate_ids(rules)
         assert duplicates == ["r1"]
@@ -219,9 +193,7 @@ class TestSortRulesByPathLength:
     def test_exact_rules_sorted_longest_first(self) -> None:
         """Test that exact match rules are sorted by path length (longest first)."""
         rules = [
-            Rule(
-                id="r1", match="exact", **{"from": "/", "to": "https://example.com", "status": 301}
-            ),
+            Rule(id="r1", match="exact", **{"from": "/", "to": "https://example.com", "status": 301}),
             Rule(
                 id="r2",
                 match="exact",
@@ -242,9 +214,7 @@ class TestSortRulesByPathLength:
     def test_prefix_rules_sorted_longest_first(self) -> None:
         """Test that prefix match rules are sorted by path length (longest first)."""
         rules = [
-            Rule(
-                id="r1", match="prefix", **{"from": "/", "to": "https://example.com", "status": 301}
-            ),
+            Rule(id="r1", match="prefix", **{"from": "/", "to": "https://example.com", "status": 301}),
             Rule(
                 id="r2",
                 match="prefix",
@@ -270,12 +240,8 @@ class TestSortRulesByPathLength:
                 match="prefix",
                 **{"from": "/blog", "to": "https://example.com", "status": 301},
             ),
-            Rule(
-                id="e1", match="exact", **{"from": "/", "to": "https://example.com", "status": 301}
-            ),
-            Rule(
-                id="p2", match="prefix", **{"from": "/", "to": "https://example.com", "status": 301}
-            ),
+            Rule(id="e1", match="exact", **{"from": "/", "to": "https://example.com", "status": 301}),
+            Rule(id="p2", match="prefix", **{"from": "/", "to": "https://example.com", "status": 301}),
             Rule(
                 id="e2",
                 match="exact",

@@ -93,9 +93,7 @@ def test_compiler_cli_validate_only(temp_output_dir: Path, test_config_path: Pat
 
 @pytest.mark.integration
 @pytest.mark.requires_caddy
-def test_compiler_cli_with_promotion(
-    temp_output_dir: Path, minimal_config_path: Path, caddy_available: bool
-) -> None:
+def test_compiler_cli_with_promotion(temp_output_dir: Path, minimal_config_path: Path, caddy_available: bool) -> None:
     """Test lacuna-compiler with full promotion (requires Caddy)."""
     if not caddy_available:
         pytest.skip("Caddy binary not available")

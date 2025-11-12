@@ -19,9 +19,7 @@ from lacuna_schema.api import load_config
 
 @pytest.mark.requires_caddy
 @pytest.mark.integration
-def test_caddy_validate_good_config(
-    temp_output_dir: Path, test_config_path: Path, caddy_available: bool
-) -> None:
+def test_caddy_validate_good_config(temp_output_dir: Path, test_config_path: Path, caddy_available: bool) -> None:
     """Test Caddy validates a good config (requires Caddy binary)."""
     if not caddy_available:
         pytest.skip("Caddy binary not available")
@@ -53,9 +51,7 @@ def test_caddy_validate_bad_config(temp_output_dir: Path, caddy_available: bool)
 
 @pytest.mark.requires_caddy
 @pytest.mark.integration
-def test_caddy_validate_missing_required_fields(
-    temp_output_dir: Path, caddy_available: bool
-) -> None:
+def test_caddy_validate_missing_required_fields(temp_output_dir: Path, caddy_available: bool) -> None:
     """Test Caddy rejects config with missing required fields."""
     if not caddy_available:
         pytest.skip("Caddy binary not available")
@@ -97,9 +93,7 @@ def test_validate_config_mocked_failure(
 
 
 @pytest.mark.integration
-def test_reload_caddy_mocked_success(
-    temp_output_dir: Path, test_config_path: Path, mock_caddy_success: None
-) -> None:
+def test_reload_caddy_mocked_success(temp_output_dir: Path, test_config_path: Path, mock_caddy_success: None) -> None:
     """Test reload_caddy with mocked success."""
     from lacuna_promote.promoter import reload_caddy
 
@@ -112,9 +106,7 @@ def test_reload_caddy_mocked_success(
 
 
 @pytest.mark.integration
-def test_reload_caddy_mocked_failure(
-    temp_output_dir: Path, test_config_path: Path, mock_caddy_failure: None
-) -> None:
+def test_reload_caddy_mocked_failure(temp_output_dir: Path, test_config_path: Path, mock_caddy_failure: None) -> None:
     """Test reload_caddy with mocked failure."""
     from lacuna_promote.promoter import reload_caddy
 
@@ -137,9 +129,7 @@ def test_rollback_without_lastgood(temp_output_dir: Path, mock_caddy_success: No
 
 
 @pytest.mark.integration
-def test_rollback_with_lastgood(
-    temp_output_dir: Path, test_config_path: Path, mock_caddy_success: None
-) -> None:
+def test_rollback_with_lastgood(temp_output_dir: Path, test_config_path: Path, mock_caddy_success: None) -> None:
     """Test successful rollback to lastgood."""
     # Create a lastgood file
     config = load_config(test_config_path)

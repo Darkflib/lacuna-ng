@@ -42,7 +42,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  # storageClassName: standard  # Uncomment and set your storage class
+    # storageClassName: standard  # Uncomment and set your storage class
 
 # Note: Before deploying, ensure your cluster has a default StorageClass
 # or uncomment and specify storageClassName above.

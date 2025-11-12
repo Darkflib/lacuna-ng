@@ -10,7 +10,7 @@ metadata:
     app: lacuna
     component: caddy
     version: v2
-  annotations:
+  # annotations:
     # Cloud-specific annotations for load balancer configuration
     # Uncomment and adjust based on your cloud provider:
 

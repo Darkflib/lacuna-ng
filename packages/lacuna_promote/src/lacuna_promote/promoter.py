@@ -139,9 +139,7 @@ def probe_sentinels(urls: list[str], timeout: float = 5.0) -> bool:
             if 300 <= response.status_code < 400:
                 logger.info(f"✓ Probe succeeded: {url} → {response.status_code}")
             else:
-                logger.warning(
-                    f"✗ Probe returned unexpected status: {url} → {response.status_code}"
-                )
+                logger.warning(f"✗ Probe returned unexpected status: {url} → {response.status_code}")
                 all_success = False
 
         except requests.Timeout:

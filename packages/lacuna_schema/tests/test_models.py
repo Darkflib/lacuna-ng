@@ -92,16 +92,12 @@ class TestRule:
 
     def test_scheme_allowlist_http(self) -> None:
         """Test that http:// scheme is allowed."""
-        rule = Rule(
-            id="test", match="exact", **{"from": "/", "to": "http://example.com", "status": 301}
-        )
+        rule = Rule(id="test", match="exact", **{"from": "/", "to": "http://example.com", "status": 301})
         assert rule.to == "http://example.com"
 
     def test_scheme_allowlist_https(self) -> None:
         """Test that https:// scheme is allowed."""
-        rule = Rule(
-            id="test", match="exact", **{"from": "/", "to": "https://example.com", "status": 301}
-        )
+        rule = Rule(id="test", match="exact", **{"from": "/", "to": "https://example.com", "status": 301})
         assert rule.to == "https://example.com"
 
     def test_scheme_reject_javascript(self) -> None:
@@ -127,9 +123,7 @@ class TestRule:
     def test_scheme_reject_file(self) -> None:
         """Test that file: scheme is rejected."""
         with pytest.raises(ValidationError) as exc_info:
-            Rule(
-                id="test", match="exact", **{"from": "/", "to": "file:///etc/passwd", "status": 301}
-            )
+            Rule(id="test", match="exact", **{"from": "/", "to": "file:///etc/passwd", "status": 301})
         assert "http or https scheme" in str(exc_info.value)
 
     def test_reject_templating_curly_braces(self) -> None:

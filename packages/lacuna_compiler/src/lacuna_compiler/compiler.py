@@ -49,9 +49,7 @@ def _build_exact_match_handler(rule: Rule, hsts_enabled: bool) -> list[dict[str,
     }
 
     if hsts_enabled:
-        response_headers["Strict-Transport-Security"] = [
-            "max-age=31536000; includeSubDomains; preload"
-        ]
+        response_headers["Strict-Transport-Security"] = ["max-age=31536000; includeSubDomains; preload"]
 
     handlers.append(
         {
@@ -76,9 +74,7 @@ def _build_exact_match_handler(rule: Rule, hsts_enabled: bool) -> list[dict[str,
     return handlers
 
 
-def _build_prefix_match_handler(
-    rule: Rule, hsts_enabled: bool, keep_query: bool
-) -> list[dict[str, Any]]:
+def _build_prefix_match_handler(rule: Rule, hsts_enabled: bool, keep_query: bool) -> list[dict[str, Any]]:
     """
     Build handler for prefix path match.
 
@@ -113,9 +109,7 @@ def _build_prefix_match_handler(
     }
 
     if hsts_enabled:
-        response_headers["Strict-Transport-Security"] = [
-            "max-age=31536000; includeSubDomains; preload"
-        ]
+        response_headers["Strict-Transport-Security"] = ["max-age=31536000; includeSubDomains; preload"]
 
     # Build subroute handler
     subroute_handlers: list[dict[str, Any]] = [

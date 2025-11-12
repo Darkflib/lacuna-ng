@@ -106,9 +106,7 @@ def test_full_workflow_with_all_test_cases(
 
 
 @pytest.mark.integration
-def test_promotion_workflow_mocked(
-    temp_output_dir: Path, test_config_path: Path, mock_caddy_success: None
-) -> None:
+def test_promotion_workflow_mocked(temp_output_dir: Path, test_config_path: Path, mock_caddy_success: None) -> None:
     """Test full promotion workflow with mocked Caddy."""
     # Run promotion
     opts = PromoteOptions(out_dir=temp_output_dir)
@@ -125,9 +123,7 @@ def test_promotion_workflow_mocked(
 
 
 @pytest.mark.integration
-def test_promotion_validate_only_mode(
-    temp_output_dir: Path, test_config_path: Path, mock_caddy_success: None
-) -> None:
+def test_promotion_validate_only_mode(temp_output_dir: Path, test_config_path: Path, mock_caddy_success: None) -> None:
     """Test promotion with validate-only flag."""
     opts = PromoteOptions(out_dir=temp_output_dir, validate_only=True)
     result_path = compile_and_promote(test_config_path, opts)

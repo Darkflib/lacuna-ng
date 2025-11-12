@@ -126,9 +126,7 @@ def main(
         else:
             typer.echo("\n✓ Config written to config.next.json")
             typer.echo("To promote with double-buffer: Use --promote flag")
-            typer.echo(
-                "To promote manually: caddy validate --config <path> && caddy reload --config <path>"
-            )
+            typer.echo("To promote manually: caddy validate --config <path> && caddy reload --config <path>")
 
         sys.exit(0)
 
