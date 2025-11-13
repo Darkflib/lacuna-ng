@@ -8,22 +8,33 @@ from typing import Any
 import pytest
 
 
+def _get_repo_root() -> Path:
+    """Get the repository root directory dynamically."""
+    # Start from this file and go up to find the repository root
+    current = Path(__file__).resolve()
+    while current.parent != current:
+        if (current / "pyproject.toml").exists() and (current / "examples").exists():
+            return current
+        current = current.parent
+    raise RuntimeError("Could not find repository root")
+
+
 @pytest.fixture
 def test_config_path() -> Path:
     """Path to the main test configuration (examples/domainlist.yaml)."""
-    return Path("/home/user/Lacuna-ng/examples/domainlist.yaml")
+    return _get_repo_root() / "examples" / "domainlist.yaml"
 
 
 @pytest.fixture
 def minimal_config_path() -> Path:
     """Path to the minimal test configuration."""
-    return Path("/home/user/Lacuna-ng/examples/minimal.yaml")
+    return _get_repo_root() / "examples" / "minimal.yaml"
 
 
 @pytest.fixture
 def test_cases_path() -> Path:
     """Path to test cases file for simulator."""
-    return Path("/home/user/Lacuna-ng/examples/cases.txt")
+    return _get_repo_root() / "examples" / "cases.txt"
 
 
 @pytest.fixture
@@ -91,4 +102,10 @@ def caddy_available() -> bool:
 @pytest.fixture
 def fixture_config_path() -> Path:
     """Path to the simple test fixture configuration."""
-    return Path("/home/user/Lacuna-ng/tests/fixtures/test_config.yaml")
+    return _get_repo_root() / "tests" / "fixtures" / "test_config.yaml"
+
+
+@pytest.fixture
+def repo_root() -> Path:
+    """Path to the repository root directory."""
+    return _get_repo_root()
