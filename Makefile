@@ -9,10 +9,9 @@ install: ## Install dependencies and pre-commit hooks
 	uv sync --all-extras --dev
 	uv run pre-commit install
 
-fmt: ## Format code with ruff and black
+fmt: ## Format code with ruff
 	uv run ruff check --fix .
 	uv run ruff format .
-	#uv run black .
 
 lint: ## Type check with mypy
 	uv run mypy packages/ tools/

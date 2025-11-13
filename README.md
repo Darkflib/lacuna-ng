@@ -113,7 +113,7 @@ make promote
 
 # 4. Format code
 make fmt
-# Expected output: All files formatted with ruff and black
+# Expected output: All files formatted with ruff
 # ✓ Code formatted
 
 # 5. Run type checks
@@ -489,7 +489,7 @@ This project uses AI agents for parallel development. See [AGENTS.md](AGENTS.md)
 - **Data Modeling**: Pydantic v2
 - **CLI**: Typer or stdlib argparse
 - **Testing**: pytest, coverage ≥85%, Hypothesis for property tests
-- **Linting**: ruff, black
+- **Linting**: ruff
 - **Containers**: Podman/Docker, multi-arch images to GHCR
 - **Edge Server**: Caddy v2.8.x with JSON config
 
@@ -498,7 +498,7 @@ This project uses AI agents for parallel development. See [AGENTS.md](AGENTS.md)
 All code must meet these standards:
 
 - **Type safety**: Pass `mypy --strict` with no errors
-- **Formatting**: Formatted with `ruff` and `black`
+- **Formatting**: Formatted with `ruff`
 - **Linting**: Pass `ruff check` with no warnings
 - **Testing**: 85%+ test coverage
 - **Documentation**: All public APIs documented
@@ -531,7 +531,6 @@ pre-commit run --all-files
 
 Hooks include:
 - **ruff**: Fast linting and formatting
-- **black**: Code formatting
 - **mypy**: Strict type checking
 - **yamllint**: YAML validation
 - **Standard checks**: trailing whitespace, EOF fixer, merge conflicts
