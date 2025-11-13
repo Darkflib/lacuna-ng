@@ -1,6 +1,7 @@
 """Unit tests for lacuna_compiler core compilation logic."""
 
 import json
+from typing import Literal
 
 from lacuna_compiler.compiler import compile_to_caddy
 from lacuna_schema.models import Config, Defaults, Host, Rule
@@ -540,7 +541,7 @@ def test_deterministic_output() -> None:
 
 def test_status_codes() -> None:
     """Test that different status codes are preserved."""
-    status_codes = [301, 302, 303, 307, 308]
+    status_codes: list[Literal[301, 302, 303, 307, 308]] = [301, 302, 303, 307, 308]
 
     for status in status_codes:
         config = Config(
