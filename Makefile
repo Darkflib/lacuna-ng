@@ -12,7 +12,7 @@ install: ## Install dependencies and pre-commit hooks
 fmt: ## Format code with ruff and black
 	uv run ruff check --fix .
 	uv run ruff format .
-	uv run black .
+	#uv run black .
 
 lint: ## Type check with mypy
 	uv run mypy packages/ tools/
