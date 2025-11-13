@@ -1,0 +1,363 @@
+{
+  "_meta": {
+    "built_at": "2025-11-13T10:48:11Z",
+    "git": "afe61cf",
+    "content_sha256": "cad3dc0d611cd42831f58e5c71571e2d50e926dd0d3f94898ab27156f5d687de"
+  },
+  "apps": {
+    "http": {
+      "servers": {
+        "http_redirect": {
+          "listen": [
+            ":80"
+          ],
+          "routes": [
+            {
+              "handle": [
+                {
+                  "handler": "static_response",
+                  "headers": {
+                    "Location": [
+                      "https://{http.request.host}{http.request.uri}"
+                    ]
+                  },
+                  "status_code": 308
+                }
+              ]
+            }
+          ]
+        },
+        "https": {
+          "listen": [
+            ":443"
+          ],
+          "routes": [
+            {
+              "match": [
+                {
+                  "host": [
+                    "prod.example.com"
+                  ]
+                }
+              ],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "match": [
+                        {
+                          "path": [
+                            "/"
+                          ]
+                        }
+                      ],
+                      "handle": [
+                        {
+                          "handler": "headers",
+                          "response": {
+                            "set": {
+                              "X-Lacuna-Rule": [
+                                "home"
+                              ],
+                              "Strict-Transport-Security": [
+                                "max-age=31536000; includeSubDomains; preload"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "handler": "static_response",
+                          "headers": {
+                            "Location": [
+                              "https://www.example.org/"
+                            ]
+                          },
+                          "status_code": 308
+                        }
+                      ]
+                    },
+                    {
+                      "match": [
+                        {
+                          "path": [
+                            "/blog*"
+                          ]
+                        }
+                      ],
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [
+                                {
+                                  "handler": "rewrite",
+                                  "strip_path_prefix": "/blog"
+                                },
+                                {
+                                  "handler": "headers",
+                                  "response": {
+                                    "set": {
+                                      "X-Lacuna-Rule": [
+                                        "blog"
+                                      ],
+                                      "Strict-Transport-Security": [
+                                        "max-age=31536000; includeSubDomains; preload"
+                                      ]
+                                    }
+                                  }
+                                },
+                                {
+                                  "handler": "static_response",
+                                  "headers": {
+                                    "Location": [
+                                      "{http.vars.redirect_uri}"
+                                    ]
+                                  },
+                                  "status_code": 308
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "handler": "vars",
+                          "redirect_uri": "https://blog.example.org{http.request.uri.path}{http.request.uri.query}"
+                        }
+                      ]
+                    },
+                    {
+                      "match": [
+                        {
+                          "path": [
+                            "/docs*"
+                          ]
+                        }
+                      ],
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [
+                                {
+                                  "handler": "rewrite",
+                                  "strip_path_prefix": "/docs"
+                                },
+                                {
+                                  "handler": "headers",
+                                  "response": {
+                                    "set": {
+                                      "X-Lacuna-Rule": [
+                                        "docs"
+                                      ],
+                                      "Strict-Transport-Security": [
+                                        "max-age=31536000; includeSubDomains; preload"
+                                      ]
+                                    }
+                                  }
+                                },
+                                {
+                                  "handler": "static_response",
+                                  "headers": {
+                                    "Location": [
+                                      "https://docs.example.org{http.request.uri.path}"
+                                    ]
+                                  },
+                                  "status_code": 308
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "match": [
+                        {
+                          "path": [
+                            "/api*"
+                          ]
+                        }
+                      ],
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [
+                                {
+                                  "handler": "rewrite",
+                                  "strip_path_prefix": "/api"
+                                },
+                                {
+                                  "handler": "headers",
+                                  "response": {
+                                    "set": {
+                                      "X-Lacuna-Rule": [
+                                        "api"
+                                      ],
+                                      "Strict-Transport-Security": [
+                                        "max-age=31536000; includeSubDomains; preload"
+                                      ]
+                                    }
+                                  }
+                                },
+                                {
+                                  "handler": "static_response",
+                                  "headers": {
+                                    "Location": [
+                                      "{http.vars.redirect_uri}"
+                                    ]
+                                  },
+                                  "status_code": 307
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "handler": "vars",
+                          "redirect_uri": "https://api.example.org{http.request.uri.path}{http.request.uri.query}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "terminal": true
+            },
+            {
+              "match": [
+                {
+                  "host": [
+                    "old.example.com"
+                  ]
+                }
+              ],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "match": [
+                        {
+                          "path": [
+                            "/*"
+                          ]
+                        }
+                      ],
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [
+                                {
+                                  "handler": "rewrite",
+                                  "strip_path_prefix": "/"
+                                },
+                                {
+                                  "handler": "headers",
+                                  "response": {
+                                    "set": {
+                                      "X-Lacuna-Rule": [
+                                        "catch-all"
+                                      ],
+                                      "Strict-Transport-Security": [
+                                        "max-age=31536000; includeSubDomains; preload"
+                                      ]
+                                    }
+                                  }
+                                },
+                                {
+                                  "handler": "static_response",
+                                  "headers": {
+                                    "Location": [
+                                      "{http.vars.redirect_uri}"
+                                    ]
+                                  },
+                                  "status_code": 301
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "handler": "vars",
+                          "redirect_uri": "https://new.example.com{http.request.uri.path}{http.request.uri.query}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "terminal": true
+            },
+            {
+              "match": [
+                {
+                  "host": [
+                    "parked.example.com"
+                  ]
+                }
+              ],
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "match": [
+                        {
+                          "path": [
+                            "/*"
+                          ]
+                        }
+                      ],
+                      "handle": [
+                        {
+                          "handler": "subroute",
+                          "routes": [
+                            {
+                              "handle": [
+                                {
+                                  "handler": "rewrite",
+                                  "strip_path_prefix": "/"
+                                },
+                                {
+                                  "handler": "headers",
+                                  "response": {
+                                    "set": {
+                                      "X-Lacuna-Rule": [
+                                        "parked"
+                                      ]
+                                    }
+                                  }
+                                },
+                                {
+                                  "handler": "static_response",
+                                  "headers": {
+                                    "Location": [
+                                      "https://about.example.com/parked{http.request.uri.path}"
+                                    ]
+                                  },
+                                  "status_code": 302
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "terminal": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}
