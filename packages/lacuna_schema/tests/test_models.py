@@ -1,6 +1,7 @@
 """Tests for Pydantic models."""
 
 from pathlib import Path
+from typing import Literal
 
 import pytest
 from lacuna_schema import Config, Defaults, Host, Rule, load_config
@@ -164,7 +165,7 @@ class TestRule:
 
     def test_status_codes_valid(self) -> None:
         """Test all valid status codes."""
-        valid_codes = [301, 302, 303, 307, 308]
+        valid_codes: list[Literal[301, 302, 303, 307, 308]] = [301, 302, 303, 307, 308]
         for status in valid_codes:
             rule = Rule(
                 id="test",
@@ -185,12 +186,13 @@ class TestRule:
                     match="exact",
                     from_="/",
                     to="https://example.com",
-                    status=status,
+                    status=status,  # type: ignore[arg-type]
                 )
 
     def test_match_type_valid(self) -> None:
         """Test valid match types."""
-        for match_type in ["exact", "prefix"]:
+        match_types: list[Literal["exact", "prefix"]] = ["exact", "prefix"]
+        for match_type in match_types:
             rule = Rule(
                 id="test",
                 match=match_type,
@@ -205,7 +207,7 @@ class TestRule:
         with pytest.raises(ValidationError):
             Rule(
                 id="test",
-                match="regex",
+                match="regex",  # type: ignore[arg-type]
                 from_="/",
                 to="https://example.com",
                 status=301,
