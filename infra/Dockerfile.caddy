@@ -11,9 +11,6 @@ LABEL org.opencontainers.image.version="2.0.0"
 # Create necessary directories
 RUN mkdir -p /srv/lacuna/config /data
 
-# Ensure proper permissions
-RUN chown -R caddy:caddy /srv/lacuna /data
-
 # Config file location (will be mounted as volume)
 # Active config: /srv/lacuna/config/config.active.json
 # ACME cache: /data (Caddy's default)
