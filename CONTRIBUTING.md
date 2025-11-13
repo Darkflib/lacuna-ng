@@ -108,7 +108,7 @@ vim packages/lacuna_schema/src/lacuna_schema/models.py
 
 # 2. Run formatters
 make fmt
-# Runs: ruff format && black
+# Runs: ruff format
 
 # 3. Run type checks
 make lint
@@ -210,7 +210,7 @@ def load_config(path: Path, validate: bool = True) -> Config:
 
 ### Code Formatting
 
-- **Use `ruff` and `black`** for consistent formatting
+- **Use `ruff`** for consistent formatting
 - Line length: 100 characters
 - Run `make fmt` before committing
 
