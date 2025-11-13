@@ -182,7 +182,7 @@ jobs:
         run: |
           output=$(uv run lacuna-sim --yaml examples/domainlist.yaml --cases examples/cases.txt 2>&1)
           echo "$output"
-          if echo "$output" | grep -q "dead rule"; then
+          if echo "$output" | grep -qE "Dead rules \(never matched\)"; then
             echo "ERROR: Dead rules detected"
             exit 1
           fi
@@ -231,6 +231,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
