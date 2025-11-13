@@ -1,6 +1,6 @@
 # Lacuna v2 - KISS Redirection Service
 
-![CI](https://github.com/USER/REPO/actions/workflows/ci.yaml/badge.svg)
+![CI](https://github.com/darkflib/lacuna-ng/actions/workflows/ci.yaml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![Caddy](https://img.shields.io/badge/caddy-2.8-green)
