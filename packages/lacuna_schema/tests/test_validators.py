@@ -197,12 +197,16 @@ class TestSortRulesByPathLength:
             Rule(
                 id="r2",
                 match="exact",
-                from_="/about", to="https://example.com", status=301,
+                from_="/about",
+                to="https://example.com",
+                status=301,
             ),
             Rule(
                 id="r3",
                 match="exact",
-                from_="/about/team", to="https://example.com", status=301,
+                from_="/about/team",
+                to="https://example.com",
+                status=301,
             ),
         ]
         sorted_rules = sort_rules_by_path_length(rules)
@@ -218,12 +222,16 @@ class TestSortRulesByPathLength:
             Rule(
                 id="r2",
                 match="prefix",
-                from_="/api", to="https://example.com", status=301,
+                from_="/api",
+                to="https://example.com",
+                status=301,
             ),
             Rule(
                 id="r3",
                 match="prefix",
-                from_="/api/v2", to="https://example.com", status=301,
+                from_="/api/v2",
+                to="https://example.com",
+                status=301,
             ),
         ]
         sorted_rules = sort_rules_by_path_length(rules)
@@ -238,14 +246,18 @@ class TestSortRulesByPathLength:
             Rule(
                 id="p1",
                 match="prefix",
-                from_="/blog", to="https://example.com", status=301,
+                from_="/blog",
+                to="https://example.com",
+                status=301,
             ),
             Rule(id="e1", match="exact", from_="/", to="https://example.com", status=301),
             Rule(id="p2", match="prefix", from_="/", to="https://example.com", status=301),
             Rule(
                 id="e2",
                 match="exact",
-                from_="/about", to="https://example.com", status=301,
+                from_="/about",
+                to="https://example.com",
+                status=301,
             ),
         ]
         sorted_rules = sort_rules_by_path_length(rules)

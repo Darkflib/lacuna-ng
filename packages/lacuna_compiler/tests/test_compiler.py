@@ -18,7 +18,9 @@ def test_basic_structure() -> None:
                     Rule(
                         id="home",
                         match="exact",
-                        from_="/", to="https://www.example.com/", status=308,
+                        from_="/",
+                        to="https://www.example.com/",
+                        status=308,
                     )
                 ],
             )
@@ -51,7 +53,9 @@ def test_http_redirect_server() -> None:
                     Rule(
                         id="test",
                         match="exact",
-                        from_="/", to="https://target.com/", status=308,
+                        from_="/",
+                        to="https://target.com/",
+                        status=308,
                     )
                 ],
             )
@@ -87,7 +91,9 @@ def test_https_server_listen() -> None:
                     Rule(
                         id="test",
                         match="exact",
-                        from_="/", to="https://target.com/", status=308,
+                        from_="/",
+                        to="https://target.com/",
+                        status=308,
                     )
                 ],
             )
@@ -113,7 +119,9 @@ def test_exact_match_rule() -> None:
                     Rule(
                         id="home",
                         match="exact",
-                        from_="/about", to="https://target.com/about-us", status=308,
+                        from_="/about",
+                        to="https://target.com/about-us",
+                        status=308,
                     )
                 ],
             )
@@ -172,7 +180,9 @@ def test_prefix_match_rule() -> None:
                     Rule(
                         id="blog",
                         match="prefix",
-                        from_="/blog", to="https://blog.example.com", status=308,
+                        from_="/blog",
+                        to="https://blog.example.com",
+                        status=308,
                         keep_query=True,
                     )
                 ],
@@ -238,7 +248,9 @@ def test_prefix_without_query() -> None:
                     Rule(
                         id="docs",
                         match="prefix",
-                        from_="/docs", to="https://docs.example.com", status=308,
+                        from_="/docs",
+                        to="https://docs.example.com",
+                        status=308,
                         keep_query=False,  # Explicitly disable
                     )
                 ],
@@ -280,12 +292,16 @@ def test_x_lacuna_rule_header() -> None:
                     Rule(
                         id="rule1",
                         match="exact",
-                        from_="/one", to="https://target.com/1", status=301,
+                        from_="/one",
+                        to="https://target.com/1",
+                        status=301,
                     ),
                     Rule(
                         id="rule2",
                         match="prefix",
-                        from_="/two", to="https://target.com/2", status=302,
+                        from_="/two",
+                        to="https://target.com/2",
+                        status=302,
                     ),
                 ],
             )
@@ -319,7 +335,9 @@ def test_hsts_header_enabled() -> None:
                     Rule(
                         id="test",
                         match="exact",
-                        from_="/", to="https://target.com/", status=308,
+                        from_="/",
+                        to="https://target.com/",
+                        status=308,
                     )
                 ],
             )
@@ -347,7 +365,9 @@ def test_hsts_header_disabled() -> None:
                     Rule(
                         id="parked",
                         match="exact",
-                        from_="/", to="https://target.com/", status=302,
+                        from_="/",
+                        to="https://target.com/",
+                        status=302,
                     )
                 ],
             )
@@ -376,7 +396,9 @@ def test_hsts_host_override() -> None:
                     Rule(
                         id="test",
                         match="exact",
-                        from_="/", to="https://target.com/", status=302,
+                        from_="/",
+                        to="https://target.com/",
+                        status=302,
                     )
                 ],
             )
@@ -403,7 +425,9 @@ def test_multiple_hosts() -> None:
                     Rule(
                         id="home",
                         match="exact",
-                        from_="/", to="https://target1.com/", status=308,
+                        from_="/",
+                        to="https://target1.com/",
+                        status=308,
                     )
                 ],
             ),
@@ -413,7 +437,9 @@ def test_multiple_hosts() -> None:
                     Rule(
                         id="root",
                         match="prefix",
-                        from_="/", to="https://target2.com", status=301,
+                        from_="/",
+                        to="https://target2.com",
+                        status=301,
                     )
                 ],
             ),
@@ -445,7 +471,9 @@ def test_metadata_block() -> None:
                     Rule(
                         id="test",
                         match="exact",
-                        from_="/", to="https://target.com/", status=308,
+                        from_="/",
+                        to="https://target.com/",
+                        status=308,
                     )
                 ],
             )
@@ -483,12 +511,16 @@ def test_deterministic_output() -> None:
                     Rule(
                         id="home",
                         match="exact",
-                        from_="/", to="https://target.com/", status=308,
+                        from_="/",
+                        to="https://target.com/",
+                        status=308,
                     ),
                     Rule(
                         id="blog",
                         match="prefix",
-                        from_="/blog", to="https://blog.target.com", status=308,
+                        from_="/blog",
+                        to="https://blog.target.com",
+                        status=308,
                     ),
                 ],
             )
@@ -550,7 +582,9 @@ def test_path_trailing_slash_handling() -> None:
                     Rule(
                         id="test",
                         match="prefix",
-                        from_="/api", to="https://api.example.com/", status=308,
+                        from_="/api",
+                        to="https://api.example.com/",
+                        status=308,
                         keep_query=False,
                     )
                 ],
@@ -578,7 +612,9 @@ def test_path_trailing_slash_handling() -> None:
                     Rule(
                         id="test",
                         match="prefix",
-                        from_="/api", to="https://api.example.com", status=308,
+                        from_="/api",
+                        to="https://api.example.com",
+                        status=308,
                         keep_query=False,
                     )
                 ],
@@ -608,7 +644,9 @@ def test_terminal_flag() -> None:
                     Rule(
                         id="test",
                         match="exact",
-                        from_="/", to="https://target.com/", status=308,
+                        from_="/",
+                        to="https://target.com/",
+                        status=308,
                     )
                 ],
             )
