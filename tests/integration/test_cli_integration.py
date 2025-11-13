@@ -13,7 +13,7 @@ import pytest
 def _run_cmd(cmd: list[str], **kwargs) -> subprocess.CompletedProcess:
     """
     Run a command, using either uv or direct Python based on availability.
-    
+
     Converts commands like ["uv", "run", "python", ...] to ["python", ...]
     and ["uv", "run", "lacuna-compiler"] to ["lacuna-compiler"] if uv is not available.
     """
@@ -27,17 +27,17 @@ def _run_cmd(cmd: list[str], **kwargs) -> subprocess.CompletedProcess:
                 return subprocess.run(cmd, **kwargs)
         except (FileNotFoundError, subprocess.TimeoutExpired):
             pass
-        
+
         # uv not available, use direct execution
         # Remove "uv run" prefix
         new_cmd = cmd[2:]
-        
+
         # If command is "python", use sys.executable
         if new_cmd[0] == "python":
             new_cmd = [sys.executable] + new_cmd[1:]
-        
+
         return subprocess.run(new_cmd, **kwargs)
-    
+
     # Not a uv command, run as-is
     return subprocess.run(cmd, **kwargs)
 
@@ -126,7 +126,10 @@ def test_compiler_cli_validate_only(temp_output_dir: Path, test_config_path: Pat
 
 @pytest.mark.integration
 @pytest.mark.requires_caddy
-def test_compiler_cli_with_promotion(temp_output_dir: Path, minimal_config_path: Path, caddy_available: bool, repo_root: Path) -> None:
+def test_compiler_cli_with_promotion(temp_output_dir: Path,
+                                     minimal_config_path: Path,
+                                     caddy_available: bool,
+                                     repo_root: Path) -> None:
     """Test lacuna-compiler with full promotion (requires Caddy)."""
     if not caddy_available:
         pytest.skip("Caddy binary not available")
