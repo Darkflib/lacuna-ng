@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -53,7 +53,7 @@ jobs:
     needs: validate
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -119,7 +119,7 @@ jobs:
     needs: build-docker
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -207,7 +207,7 @@ jobs:
 #   needs: validate
 #   steps:
 #     - name: Checkout code
-#       uses: actions/checkout@v5
+#       uses: actions/checkout@v6
 #
 #     - name: Set up Python
 #       uses: actions/setup-python@v6
