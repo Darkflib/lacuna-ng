@@ -125,7 +125,7 @@ jobs:
         run: uv run pytest -v --cov --cov-report=xml --cov-report=term
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-${{ matrix.python-version }}
           path: coverage.xml
@@ -194,7 +194,7 @@ jobs:
           echo "SUCCESS: No dead rules detected"
 
       - name: Upload compiled configs
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: compiled-configs
           path: ./test-output/*.json
