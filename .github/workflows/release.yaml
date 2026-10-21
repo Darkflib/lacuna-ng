@@ -99,8 +99,9 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Run Trivy security scan
-        uses: aquasecurity/trivy-action@v0.33.1
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
+          version: v0.76.1
           image-ref: 'ghcr.io/${{ github.repository }}/lacuna-caddy:${{ steps.version.outputs.version }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
