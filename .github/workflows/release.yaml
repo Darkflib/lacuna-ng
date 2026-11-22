@@ -84,12 +84,14 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Version: $VERSION"
+          # Registry names must be lowercase; the owner here is "Darkflib".
+          echo "image=ghcr.io/${GITHUB_REPOSITORY,,}/lacuna-caddy" >> "$GITHUB_OUTPUT"
 
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
-          images: ghcr.io/${{ github.repository }}/lacuna-caddy
+          images: ${{ steps.version.outputs.image }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -112,7 +114,7 @@ jobs:
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           version: v0.76.1
-          image-ref: 'ghcr.io/${{ github.repository }}/lacuna-caddy:${{ steps.version.outputs.version }}'
+          image-ref: '${{ steps.version.outputs.image }}:${{ steps.version.outputs.version }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'HIGH,CRITICAL'
@@ -150,7 +152,7 @@ jobs:
             echo "Generating changelog from $PREV_TAG to $GITHUB_REF_NAME"
             COMMITS=$(git log "${PREV_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges)
           fi
-          IMAGE="ghcr.io/${GITHUB_REPOSITORY}/lacuna-caddy"
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}/lacuna-caddy"
           BLOB="https://github.com/${GITHUB_REPOSITORY}"
           {
             echo "## Lacuna v2 - Release ${VERSION}"
